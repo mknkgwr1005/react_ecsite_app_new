@@ -1,12 +1,13 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
+import firebase from "firebase/app";
 import "firebase/firestore"; //firestoreを使う場合
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-export const firebaseConfig = {
+const firebaseConfig = {
   apiKey: "AIzaSyBoKKCH0VwV6BVr9ZvYD4IPC30CB4_meYE",
   authDomain: "react-ecsite-app-a6ab9.firebaseapp.com",
   projectId: "react-ecsite-app-a6ab9",

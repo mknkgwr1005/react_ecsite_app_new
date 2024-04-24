@@ -1,22 +1,28 @@
 import { Button, Grid, TextField } from "@material-ui/core";
+// import axios from "axios";
 import { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+// import { statusContext } from "../components/providers/statusContext";
+// import { User } from "../types/User";
 import LockIcon from "@mui/icons-material/Lock";
 import EmailIcon from "@mui/icons-material/Email";
 import EmojiPeopleIcon from "@mui/icons-material/EmojiPeople";
 import PhoneIcon from "@mui/icons-material/Phone";
 import HomeIcon from "@mui/icons-material/Home";
-import { setDoc, doc, updateDoc, getDoc } from "firebase/firestore";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { collection, setDoc, doc, updateDoc, getDoc } from "firebase/firestore";
+import { getFirestore } from "firebase/firestore";
+import { app } from "../app/config";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { registerInfoContext } from "../components/Register/RegisterInfo";
 import "../css/registerUser.css";
-import { auth, db } from "../app/index";
 
 export function RegisterInfo() {
   const navigate = useNavigate();
+  // const auth = useContext(statusContext);
   const {
     register,
+    handleSubmit,
     formState: { errors },
     trigger,
   } = useForm({
@@ -28,12 +34,14 @@ export function RegisterInfo() {
   const userData = useContext(registerInfoContext);
 
   // ユーザー情報をfirebaseに送る
-  const sendUserInfo = () => {
+  const UserInfo = () => {
     updateId();
-    registerUser().then((result) => {
-      navigate("/AfterRegister");
-    });
+    registerUserInfoToServer();
   };
+  // firestore認証
+  const db = getFirestore(app);
+  const docRef = collection(db, "userInformation");
+  const authenication = getAuth();
 
   const mailAddress = userData?.registerData.mailAddress;
   const password = userData?.registerData.password;
@@ -46,15 +54,15 @@ export function RegisterInfo() {
     });
   };
 
-  //authnicationへ登録する
-  const registerUser = async () => {
+  //   ユーザー情報をfirebaseに送る
+  const registerUserInfoToServer = async () => {
     if (mailAddress !== undefined && password !== undefined) {
-      // authnicationへ登録
-      createUserWithEmailAndPassword(auth, mailAddress, password)
+      // firebaseへ登録
+      createUserWithEmailAndPassword(authenication, mailAddress, password)
         .then((response) => {
+          const user = response.user;
           if (response) {
-            // authnicationへ登録できたら、firebaseに登録する
-            setUserInfo();
+            navigate("/AfterRegister");
           }
         })
         .catch((error) => {
@@ -62,25 +70,24 @@ export function RegisterInfo() {
           alert(`登録できませんでした+${errorMsg}`);
         });
     }
-  };
 
-  // ユーザーを登録
-  const setUserInfo = async () => {
     // IDを取得する
     const newId = await getDoc(doc(db, "userInfoId", "lastId"));
-    // ユーザー登録
-    await setDoc(doc(db, "userInformation", String(newId.data()?.userId + 1)), {
-      id: newId.data()?.userId + 1,
-      name: userData?.registerData.name,
-      email: userData?.registerData.mailAddress,
-      password: userData?.registerData.password,
-      zipcode: userData?.registerData.zipcode,
-      address: userData?.registerData.address,
-      telephone: userData?.registerData.telephone,
-    }).catch((error) => {
+
+    const sendUserInfo = await setDoc(
+      doc(db, "userInformation", String(newId.data()?.userId + 1)),
+      {
+        id: newId.data()?.userId + 1,
+        name: userData?.registerData.name,
+        email: userData?.registerData.mailAddress,
+        password: userData?.registerData.password,
+        zipcode: userData?.registerData.zipcode,
+        address: userData?.registerData.address,
+        telephone: userData?.registerData.telephone,
+      }
+    ).catch((error) => {
       console.log(error);
     });
-    // end of line
   };
 
   return (
@@ -275,11 +282,7 @@ export function RegisterInfo() {
               <div id="registerUserErrMsg">{errors.address?.message}</div>
             </div>
             <Grid container justifyContent="center" alignItems="flex-start">
-              <Button
-                color="inherit"
-                type="submit"
-                onClick={() => sendUserInfo()}
-              >
+              <Button color="inherit" type="submit" onClick={() => UserInfo()}>
                 送信
               </Button>
             </Grid>
