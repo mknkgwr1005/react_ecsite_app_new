@@ -1,19 +1,14 @@
 /* eslint-disable no-lone-blocks */
 import React, { useContext } from "react";
-import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { InputLogin } from "../components/inputLogin";
 import Button from "@material-ui/core/Button";
 import { statusContext } from "../components/providers/statusContext";
 import { app } from "../app/config";
 import "firebase/auth";
 import {
   getAuth,
-  signInWithRedirect,
   signInWithPopup,
-  createUserWithEmailAndPassword,
-  getRedirectResult,
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import "firebase/auth";
@@ -21,8 +16,6 @@ import { TwitterAuthProvider, FacebookAuthProvider } from "firebase/auth";
 import { Box, Grid, Input, Typography } from "@material-ui/core";
 import LockIcon from "@mui/icons-material/Lock";
 import EmailIcon from "@mui/icons-material/Email";
-import { collection, addDoc } from "firebase/firestore";
-import { getFirestore } from "firebase/firestore";
 import "../css/Login.css";
 
 // useEffectを使ったログイン機能;
