@@ -12,6 +12,9 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { registerInfoContext } from "../components/Register/RegisterInfo";
 import "../css/registerUser.css";
 import { auth, db } from "../app/index";
+import axios from "axios";
+import { stringify } from "querystring";
+import { Eco } from "@material-ui/icons";
 
 export function RegisterInfo() {
   const navigate = useNavigate();
@@ -54,7 +57,7 @@ export function RegisterInfo() {
         .then((response) => {
           if (response) {
             // authnicationへ登録できたら、firebaseに登録する
-            setUserInfo();
+            setUserInfo(response.user.uid);
           }
         })
         .catch((error) => {
@@ -65,12 +68,12 @@ export function RegisterInfo() {
   };
 
   // ユーザーを登録
-  const setUserInfo = async () => {
+  const setUserInfo = async (uid: string) => {
     // IDを取得する
     const newId = await getDoc(doc(db, "userInfoId", "lastId"));
     // ユーザー登録
     await setDoc(doc(db, "userInformation", String(newId.data()?.userId + 1)), {
-      id: newId.data()?.userId + 1,
+      id: uid,
       name: userData?.registerData.name,
       email: userData?.registerData.mailAddress,
       password: userData?.registerData.password,
@@ -80,7 +83,19 @@ export function RegisterInfo() {
     }).catch((error) => {
       console.log(error);
     });
-    // end of line
+  };
+
+  // 住所検索
+  const searchAddress = async (zipcode: string) => {
+    const response = await axios.get("https://zipcoda.net/api", {
+      params: { zipcode: zipcode },
+    });
+    console.dir(JSON.stringify(response));
+
+    userData?.setregisterData({
+      ...userData?.registerData,
+      address: response.data.items[0].pref + response.data.items[0].address,
+    });
   };
 
   return (
@@ -232,6 +247,7 @@ export function RegisterInfo() {
                     value: 5,
                     message: "郵便番号は5桁以上で入力してください",
                   },
+                  onBlur: (e) => searchAddress(e.currentTarget.value),
                 })}
                 value={userData?.registerData.zipcode}
                 onChange={(e) => {
