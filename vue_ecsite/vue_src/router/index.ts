@@ -37,10 +37,6 @@ const routes: Array<RouteConfig> = [
     component: () => import("../views/Top.vue"),
   },
   {
-    path: "/logout",
-    component: () => import("../views/Logout.vue"),
-  },
-  {
     path: "/cartList",
     component: () => import("../views/CartList.vue"),
   },

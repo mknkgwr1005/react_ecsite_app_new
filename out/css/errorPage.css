@@ -5,7 +5,7 @@
   font-size: 30px;
   opacity: 0.5;
   background-image: url("../../public/img/pizza_background.jpg");
-  color: black;
+  color: rgb(0, 0, 0);
   padding: 20%;
   font-weight: bold;
 }
@@ -20,5 +20,4 @@
   bottom: 0;
   right: 0;
   left: 0;
-}
-/*# sourceMappingURL=errorPage.css.map */
+}/*# sourceMappingURL=errorPage.css.map */

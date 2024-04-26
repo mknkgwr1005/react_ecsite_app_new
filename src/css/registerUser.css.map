@@ -1,9 +1,1 @@
-{
-    "version": 3,
-    "mappings": "AAAA,AAAA,mBAAmB,CAAC;EAClB,KAAK,EAAE,GAAG;EACV,WAAW,EAAE,IAAI;CAClB",
-    "sources": [
-        "registerUser.scss"
-    ],
-    "names": [],
-    "file": "registerUser.css"
-}
+{"version":3,"sources":["registerUser.scss","registerUser.css"],"names":[],"mappings":"AAAA;EACE,UAAA;EACA,iBAAA;ACCF","file":"registerUser.css"}

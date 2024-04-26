@@ -1,5 +1,5 @@
 import React, { createContext, FC, ReactNode, useState } from "react";
-import { OrderItem } from "../../types/OrderItem";
+import { OrderItem } from "../../../src/types/OrderItem";
 
 // propsの型定義
 type props = {

@@ -2,7 +2,6 @@ import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Header from "./components/Header";
 import { Login } from "./pages/Login";
-import { Logout } from "./pages/Logout";
 import { Toppage } from "./pages/Toppage";
 import { ItemList } from "./pages/Itemlist";
 import { OrderComfirm } from "./pages/OrderComfirm";
@@ -43,7 +42,6 @@ function App() {
             <Route path="/registerUser" element={<RegisterInfo />} />
             <Route path="/AfterRegister" element={<AfterRegister />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/logout" element={<Logout />} />
             <Route
               path="/OrderComfirm"
               element={<OrderComfirm></OrderComfirm>}
