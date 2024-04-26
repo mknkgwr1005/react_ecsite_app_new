@@ -15,6 +15,7 @@ import { auth, db } from "../app/index";
 import axios from "axios";
 import { stringify } from "querystring";
 import { Eco } from "@material-ui/icons";
+import { registerUserNameContext } from "../components/Register/RegisterUserName";
 
 export function RegisterInfo() {
   const navigate = useNavigate();
@@ -29,6 +30,7 @@ export function RegisterInfo() {
 
   // ユーザー情報格納先コンテキスト
   const userData = useContext(registerInfoContext);
+  const userName = useContext(registerUserNameContext);
 
   // ユーザー情報をfirebaseに送る
   const sendUserInfo = () => {
@@ -98,6 +100,14 @@ export function RegisterInfo() {
     });
   };
 
+  const setUserFirstName = (userFirstName: string) => {
+    // fullName?.firstName = userFirstName;
+    // userName?.setregisterName({
+    //   ...userName.registerName,
+    //   firstName: userFirstName,
+    // });
+  };
+
   return (
     <div className="register">
       <Grid container justifyContent="center" alignItems="flex-start">
@@ -114,20 +124,42 @@ export function RegisterInfo() {
 
               <TextField
                 className="textField"
-                label="名前"
+                label="姓"
                 variant="outlined"
                 required
                 type="text"
-                {...register("name", {
-                  required: "名前を入力してください",
+                {...register("name.lastName", {
+                  required: "姓を入力してください",
                 })}
-                value={userData?.registerData.name}
+                value={userData?.registerData.name.lastName}
                 onChange={(e) => {
-                  userData?.setregisterData({
-                    ...userData?.registerData,
-                    name: e.currentTarget.value,
+                  // userName?.setregisterName({
+                  //   ...userName.registerName,
+                  //   lastName: e.currentTarget.value,
+                  // });
+                  trigger("name.lastName");
+                }}
+              />
+              <TextField
+                className="textField"
+                label="名"
+                variant="outlined"
+                required
+                type="text"
+                {...register("name.firstName", {
+                  required: "名を入力してください",
+                })}
+                // value={userData?.registerData.name.firstName}
+                value={userName?.registerName.firstName}
+                onChange={(e) => {
+                  console.log(e.currentTarget.value);
+                  console.log(userName?.setregisterName);
+                  userName?.setregisterName({
+                    ...userName.registerName,
+                    firstName: e.currentTarget.value,
                   });
-                  trigger("name");
+                  console.log(userName?.registerName.firstName);
+                  trigger("name.firstName");
                 }}
               />
               <div id="registerUserErrMsg">{errors.name?.message}</div>

@@ -31,7 +31,7 @@ export const OrderProvider: React.FC<props> = (props) => {
     paymentMethod: 0,
     user: {
       id: 0,
-      name: "",
+      name: { lastName: "", firstName: "" },
       mailAddress: "",
       password: "",
       zipcode: "",

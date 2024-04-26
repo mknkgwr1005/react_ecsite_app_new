@@ -1,6 +1,8 @@
+import { Name } from "./Name";
+
 export type User = {
   id: number;
-  name: string;
+  name: Name;
   mailAddress: string;
   password: string;
   zipcode: string;
