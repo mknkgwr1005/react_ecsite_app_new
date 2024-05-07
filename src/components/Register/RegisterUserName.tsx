@@ -14,7 +14,7 @@ type registerUserNameType = {
 export const registerUserNameContext =
   createContext<registerUserNameType | null>(null);
 
-export const RegisterInfo: React.FC<props> = (props) => {
+export const RegisterUserName: React.FC<props> = (props) => {
   const { children } = props;
 
   const [registerName, setregisterName] = useState<Name>({
