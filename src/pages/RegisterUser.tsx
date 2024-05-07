@@ -13,8 +13,6 @@ import { registerInfoContext } from "../components/Register/RegisterInfo";
 import "../css/registerUser.css";
 import { auth, db } from "../app/index";
 import axios from "axios";
-import { stringify } from "querystring";
-import { Eco } from "@material-ui/icons";
 import { registerUserNameContext } from "../components/Register/RegisterUserName";
 
 export function RegisterInfo() {
@@ -100,14 +98,6 @@ export function RegisterInfo() {
     });
   };
 
-  const setUserFirstName = (userFirstName: string) => {
-    // fullName?.firstName = userFirstName;
-    // userName?.setregisterName({
-    //   ...userName.registerName,
-    //   firstName: userFirstName,
-    // });
-  };
-
   return (
     <div className="register">
       <Grid container justifyContent="center" alignItems="flex-start">
@@ -131,12 +121,12 @@ export function RegisterInfo() {
                 {...register("name.lastName", {
                   required: "姓を入力してください",
                 })}
-                value={userData?.registerData.name.lastName}
+                value={userName?.registerName.lastName}
                 onChange={(e) => {
-                  // userName?.setregisterName({
-                  //   ...userName.registerName,
-                  //   lastName: e.currentTarget.value,
-                  // });
+                  userName?.setregisterName({
+                    ...userName.registerName,
+                    lastName: e.currentTarget.value,
+                  });
                   trigger("name.lastName");
                 }}
               />
@@ -149,16 +139,13 @@ export function RegisterInfo() {
                 {...register("name.firstName", {
                   required: "名を入力してください",
                 })}
-                // value={userData?.registerData.name.firstName}
                 value={userName?.registerName.firstName}
                 onChange={(e) => {
-                  console.log(e.currentTarget.value);
-                  console.log(userName?.setregisterName);
                   userName?.setregisterName({
                     ...userName.registerName,
                     firstName: e.currentTarget.value,
                   });
-                  console.log(userName?.registerName.firstName);
+                  console.log(userName?.registerName);
                   trigger("name.firstName");
                 }}
               />
