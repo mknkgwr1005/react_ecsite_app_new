@@ -2,29 +2,24 @@ import React, { useContext } from "react";
 import { statusContext } from "./providers/statusContext";
 import Button from "@material-ui/core/Button";
 import axios from "axios";
-import { signOut } from "firebase/auth";
+import { getAuth, signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { app } from "../app/config";
 import { userContext } from "../components/providers/UserInfoContext";
-import { auth } from "../app/index";
 
 export const StatusButton: React.VFC = () => {
   //ユーザーが入力した情報
   const userStatus = useContext(userContext);
   // ユーザー情報
-  const changeStatus = useContext(statusContext);
-
+  const auth = useContext(statusContext);
   // ナビゲート機能
   const navigate = useNavigate();
 
+  // firebase認証機能の認証
+  const authrization = getAuth(app);
   // ログイン状態確認
-  const loginStatus = auth.onAuthStateChanged((user) => {
+  const loginStatus = authrization.onAuthStateChanged((user) => {
     console.log(user);
-    if (user) {
-      changeStatus?.setstatusCheck(true);
-    } else {
-      changeStatus?.setstatusCheck(false);
-    }
   });
 
   const clearUserInfo = () => {
@@ -41,11 +36,11 @@ export const StatusButton: React.VFC = () => {
 
   // ログアウトメソッド
   const logout = () => {
-    signOut(auth)
+    signOut(authrization)
       .then(() => {
         // Sign-out successful.
         alert("ログアウトしました");
-        changeStatus?.setstatusCheck(false);
+        auth?.setstatusCheck(false);
         loginStatus();
         clearUserInfo();
       })
@@ -57,21 +52,22 @@ export const StatusButton: React.VFC = () => {
   const handleSignOut = () => {
     if (loginStatus !== null) {
       logout();
-      changeStatus?.setstatusCheck(false);
+
+      auth?.setstatusCheck(false);
       navigate("/");
-    } else {
-      return;
     }
+    console.log("ログアウトしてTOPページへ飛ぶ");
   };
 
   const handleSignIn = () => {
     loginStatus();
     navigate("/login");
+    console.log("ログイン画面へいく");
   };
 
   return (
     <React.Fragment>
-      {changeStatus?.statusCheck ? (
+      {auth?.statusCheck ? (
         <Button color="inherit" onClick={handleSignOut}>
           ログアウト
         </Button>

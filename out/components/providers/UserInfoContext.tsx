@@ -17,6 +17,8 @@ export const userContext = createContext<userType | null>(null);
 export const UserProvider: React.FC<props> = (props) => {
   const { children } = props;
 
+  console.log("useStateが呼ばれた");
+
   const [userInfo, setUserInfo] = useState<UserInfo>({
     name: "",
     mailAddress: "",

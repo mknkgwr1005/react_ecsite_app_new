@@ -17,7 +17,6 @@ import { StatusProvider } from "./components/providers/statusContext";
 import { EditProvider } from "./components/providers/EditProvider";
 import { RegisterInfo } from "./components/Register/RegisterInfo";
 import { UserProvider } from "./components/providers/UserInfoContext";
-import { RegisterUserName } from "./components/Register/RegisterUserName";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -29,11 +28,9 @@ root.render(
       <StatusProvider>
         <CartListProvider>
           <RegisterInfo>
-            <RegisterUserName>
-              <UserProvider>
-                <App />
-              </UserProvider>
-            </RegisterUserName>
+            <UserProvider>
+              <App />
+            </UserProvider>
           </RegisterInfo>
         </CartListProvider>
       </StatusProvider>
