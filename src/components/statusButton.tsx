@@ -1,10 +1,8 @@
 import React, { useContext } from "react";
 import { statusContext } from "./providers/statusContext";
 import Button from "@material-ui/core/Button";
-import axios from "axios";
 import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-import { app } from "../app/config";
 import { userContext } from "../components/providers/UserInfoContext";
 import { auth } from "../app/index";
 
@@ -19,7 +17,6 @@ export const StatusButton: React.VFC = () => {
 
   // ログイン状態確認
   const loginStatus = auth.onAuthStateChanged((user) => {
-    console.log(user);
     if (user) {
       changeStatus?.setstatusCheck(true);
     } else {
