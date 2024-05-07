@@ -10,8 +10,6 @@ import {
   getAuth,
   signInWithPopup,
   signInWithEmailAndPassword,
-  setPersistence,
-  browserSessionPersistence,
 } from "firebase/auth";
 import "firebase/auth";
 import { TwitterAuthProvider, FacebookAuthProvider } from "firebase/auth";
@@ -19,7 +17,6 @@ import { Box, Grid, Input, Typography } from "@material-ui/core";
 import LockIcon from "@mui/icons-material/Lock";
 import EmailIcon from "@mui/icons-material/Email";
 import "../css/Login.css";
-import { auth } from "../app/index";
 
 // useEffectを使ったログイン機能;
 export const Login = () => {
@@ -28,19 +25,19 @@ export const Login = () => {
   const [loginErrorMessage, setloginErrorMessage] = useState("");
   const [mailAddress, setmailAddress] = useState("");
   const [password, setpassword] = useState("");
-  const changeStatus = useContext(statusContext);
+  const auth = useContext(statusContext);
 
   // firebaseへ送信
   // firestore認証
+  const authenication = getAuth();
 
   const submitLogin = async () => {
     setloginErrorMessage(() => "");
-    // 今のセッションが切れたら、ログアウトするオプションを送信する
-    setPersistence(auth, browserSessionPersistence)
-      .then(() => {
+    signInWithEmailAndPassword(authenication, mailAddress, password)
+      .then((result) => {
         // Signed in
-        signInWithEmailAndPassword(auth, mailAddress, password);
-        changeStatus?.setstatusCheck(true);
+        auth?.setstatusCheck(true);
+        console.log(result);
         navigate("/ItemList");
       })
       .catch((error) => {
@@ -83,7 +80,7 @@ export const Login = () => {
         if (result.operationType === "signIn") {
           console.log(result);
           console.log("twitterログイン成功");
-          changeStatus?.setstatusCheck(true);
+          auth?.setstatusCheck(true);
           navigate("/ItemList");
         }
       })
@@ -105,7 +102,7 @@ export const Login = () => {
       .then((result) => {
         if (result.operationType === "signIn") {
           console.log("facebookログイン成功");
-          changeStatus?.setstatusCheck(true);
+          auth?.setstatusCheck(true);
           navigate("/ItemList");
         }
       })
