@@ -98,6 +98,24 @@ export function RegisterInfo() {
     });
   };
 
+  const registerInfos = useContext(registerInfoContext);
+
+  // 名前をregisterInfoに格納する
+  const sendUserName = (firstNameData?: string, lastNameData?: string) => {
+    const fullName = { lastName: lastNameData, firstName: firstNameData };
+    if (fullName || (firstNameData && lastNameData)) {
+      registerInfos?.setregisterData({
+        id: registerInfos.registerData.id,
+        name: fullName,
+        mailAddress: registerInfos.registerData.mailAddress,
+        password: registerInfos.registerData.password,
+        zipcode: registerInfos.registerData.zipcode,
+        address: registerInfos.registerData.address,
+        telephone: registerInfos.registerData.telephone,
+      });
+    } else return;
+  };
+
   return (
     <div className="register">
       <Grid container justifyContent="center" alignItems="flex-start">
@@ -127,6 +145,10 @@ export function RegisterInfo() {
                     ...userName.registerName,
                     lastName: e.currentTarget.value,
                   });
+                  sendUserName(
+                    userName?.registerName.firstName,
+                    e.currentTarget.value
+                  );
                   trigger("name.lastName");
                 }}
               />
@@ -145,7 +167,10 @@ export function RegisterInfo() {
                     ...userName.registerName,
                     firstName: e.currentTarget.value,
                   });
-                  console.log(userName?.registerName);
+                  sendUserName(
+                    e.currentTarget.value,
+                    userName?.registerName.lastName
+                  );
                   trigger("name.firstName");
                 }}
               />
