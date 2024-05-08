@@ -22,6 +22,7 @@ import { app } from "../app/config";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { registerInfoContext } from "../components/Register/RegisterInfo";
 import { userContext } from "../components/providers/UserInfoContext";
+import { auth, db } from "../app/index";
 
 export const OrderComfirm: FC = () => {
   const navigate = useNavigate();
@@ -80,13 +81,13 @@ export const OrderComfirm: FC = () => {
   };
 
   // firebaseからユーザー情報を反映させる
-  const db = getFirestore(app);
-
-  const auth = getAuth();
   const currentUser = auth.currentUser;
-  const currentUserEmail = currentUser?.email;
+  const currentUserUid = currentUser?.uid;
 
-  let inputUserName = "";
+  let inputUserName = {
+    lastName: "",
+    firstName: "",
+  };
   let inputUserEmail = "";
   let inputUserZipCode = 0;
   let inputUserAddress = "";
@@ -101,7 +102,7 @@ export const OrderComfirm: FC = () => {
     // クエリを実行する
     const filteredData = query(
       userInfoRef,
-      where("email", "==", `${currentUserEmail}`)
+      where("id", "==", `${currentUserUid}`)
     );
     // クエリ結果を取得する
     const filteredSnapshot = await getDocs(filteredData);
@@ -115,11 +116,11 @@ export const OrderComfirm: FC = () => {
 
     // 郵便番号のフォーマット
     const stringZipCode = String(inputUserZipCode);
-    console.log(stringZipCode);
     const formatZipCode = stringZipCode.replace("-", "");
-    console.log(formatZipCode);
     const numberZipCode = Number(formatZipCode);
-    console.log(numberZipCode);
+
+    // 名前のフォーマット
+
     // 入力欄を更新
     userStatus?.setUserInfo({
       ...userStatus?.userInfo,
@@ -128,6 +129,14 @@ export const OrderComfirm: FC = () => {
       zipCode: numberZipCode,
       address: inputUserAddress,
       telephone: inputUserTelephone,
+    });
+  };
+
+  // Stateに名前を送信する
+  const setUserName = (lastNameData?: string, firstNameData?: string) => {
+    userStatus?.setUserInfo({
+      ...userStatus.userInfo,
+      name: { lastName: lastNameData, firstName: firstNameData },
     });
   };
 
@@ -147,16 +156,24 @@ export const OrderComfirm: FC = () => {
           <div>
             <TextField
               className="textField"
-              label="name"
+              label="lastname"
               variant="outlined"
               id="name"
               type="text"
-              value={userStatus?.userInfo.name}
+              value={userStatus?.userInfo.name?.lastName}
               onChange={(e) => {
-                userStatus?.setUserInfo({
-                  ...userStatus?.userInfo,
-                  name: e.target.value,
-                });
+                setUserName(e.currentTarget.value, undefined);
+              }}
+            />
+            <TextField
+              className="textField"
+              label="firstname"
+              variant="outlined"
+              id="name"
+              type="text"
+              value={userStatus?.userInfo.name?.firstName}
+              onChange={(e) => {
+                setUserName(undefined, e.currentTarget.value);
               }}
             />
           </div>
@@ -221,7 +238,7 @@ export const OrderComfirm: FC = () => {
               label="telephone"
               variant="outlined"
               id="tel"
-              type="tel"
+              type="number"
               value={userStatus?.userInfo.telephone}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 userStatus?.setUserInfo({
@@ -256,20 +273,6 @@ export const OrderComfirm: FC = () => {
                 }
               />
             </div>
-            {/* {deliveryHourArr.map((time: number, index: number) => (
-              <label key={index}>
-                <input
-                  name="deliveryTime"
-                  type="radio"
-                  value={time}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    userStatus?.setUserInfo({
-                      ...userStatus?.userInfo,
-                      deliveryHour: Number(e.target.value),
-                    })
-                  }
-                />
-              </div> */}
             <FormControl>
               <RadioGroup
                 row
@@ -279,7 +282,9 @@ export const OrderComfirm: FC = () => {
               >
                 {deliveryHourArr.map((time: number, index: number) => (
                   <FormControlLabel
-                    value={time}
+                    // 一意なvalueを与えないとチェックが入らない
+                    value={time.toString()}
+                    key={index}
                     control={
                       <Radio
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -288,24 +293,11 @@ export const OrderComfirm: FC = () => {
                             deliveryHour: Number(e.target.value),
                           })
                         }
+                        required
                       />
                     }
                     label={time + "時"}
                   />
-                  // <label key={index}>
-                  // <input
-                  //   name="deliveryTime"
-                  //   type="radio"
-                  //   value={time}
-                  //   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  //     setUserInfo({
-                  //       ...userInfo,
-                  //       deliveryHour: Number(e.target.value),
-                  //     })
-                  //   }
-                  // />
-                  //   <span>{time}時</span>
-                  // </label>
                 ))}
               </RadioGroup>
             </FormControl>

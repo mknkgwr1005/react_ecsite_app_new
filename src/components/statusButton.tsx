@@ -28,7 +28,7 @@ export const StatusButton: React.VFC = () => {
     // 入力欄を更新
     userStatus?.setUserInfo({
       ...userStatus?.userInfo,
-      name: "",
+      name: { lastName: "", firstName: "" },
       mailAddress: "",
       zipCode: 0,
       address: "",
