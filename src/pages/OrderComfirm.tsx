@@ -1,6 +1,4 @@
 import React, { FC, useContext, useEffect, useState } from "react";
-import { UserInfo } from "../types/UserInfo";
-import axios from "axios";
 import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import { CartListTable } from "../components/CartListTable";
@@ -10,25 +8,22 @@ import {
   Button,
   FormControl,
   FormControlLabel,
-  FormGroup,
-  FormLabel,
   Radio,
   RadioGroup,
   TextField,
 } from "@material-ui/core";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, doc, getDocs, setDoc } from "firebase/firestore";
 import { getFirestore, query, where } from "firebase/firestore";
-import { app } from "../app/config";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { registerInfoContext } from "../components/Register/RegisterInfo";
 import { userContext } from "../components/providers/UserInfoContext";
 import { auth, db } from "../app/index";
+import { cartListContext } from "../components/providers/CartListProvider";
 
 export const OrderComfirm: FC = () => {
   const navigate = useNavigate();
   const totalPrice = useTotalPrice();
   //ユーザーが入力した情報
   const userStatus = useContext(userContext);
+  const userItem = useContext(cartListContext);
 
   //配達時間の表示の為の配列
   const deliveryHourArr = [10, 11, 12, 13, 14, 15, 16, 17, 18];
@@ -49,35 +44,63 @@ export const OrderComfirm: FC = () => {
       return deliveryTime;
     });
   }, [userStatus?.userInfo.deliveryDate, userStatus?.userInfo.deliveryHour]);
+
   //注文失敗時のエラーメッセージ
   const [orderErrorMessage, setOrderErrorMessage] = useState("");
+
   /**
    * 商品を注文する.
    */
   const order = async () => {
+    const lastNameStr = userStatus?.userInfo.name?.lastName;
+    const firstNameStr = userStatus?.userInfo.name?.firstName;
+    let fullName = "";
+    if (lastNameStr !== undefined && firstNameStr !== undefined) {
+      fullName = lastNameStr + firstNameStr;
+    } else return;
+
     setOrderErrorMessage(() => "");
-    const response = await axios.post(
-      `http://153.127.48.168:8080/ecsite-api/order`,
-      {
-        userId: 0, //仮
+
+    if (currentUser && currentUserUid) {
+      await setDoc(doc(db, "orderInformation", currentUserUid), {
+        userId: currentUserUid,
         status: 0,
         totalPrice: totalPrice.finallyTotalPrice,
-        destinationName: userStatus?.userInfo.name,
+        destinationName: fullName,
         destinationEmail: userStatus?.userInfo.mailAddress,
         destinationZipcode: userStatus?.userInfo.zipCode,
         destinationAddress: userStatus?.userInfo.address,
         destinationTel: userStatus?.userInfo.telephone,
         deliveryTime: deliveryTime,
         paymentMethod: userStatus?.userInfo.paymentMethod,
-        orderItemFormList: [], //仮
-      }
-    );
-    const status = response.data.status;
-    if (status === "success") {
-      navigate("/orderFinished");
-    } else {
-      setOrderErrorMessage(() => "注文できませんでした。");
-    }
+        orderItemFormList: userItem?.cartList, //仮
+      }).then(() => navigate("/OrderFinished"));
+    } else return;
+
+    // const response = await axios.post(
+    //   `http://153.127.48.168:8080/ecsite-api/order`,
+    //   {
+    //     userId: 0, //仮
+    //     status: 0,
+    //     totalPrice: totalPrice.finallyTotalPrice,
+    //     destinationName: fullName,
+    //     destinationEmail: userStatus?.userInfo.mailAddress,
+    //     destinationZipcode: userStatus?.userInfo.zipCode,
+    //     destinationAddress: userStatus?.userInfo.address,
+    //     destinationTel: userStatus?.userInfo.telephone,
+    //     deliveryTime: deliveryTime,
+    //     paymentMethod: userStatus?.userInfo.paymentMethod,
+    //     orderItemFormList: userItem?.cartList, //仮
+    //   }
+    // );
+    // const status = response.data.status;
+    // console.log(status);
+
+    // if (status === "success") {
+    //   navigate("/orderFinished");
+    // } else {
+    //   setOrderErrorMessage(() => "注文できませんでした。");
+    // }
   };
 
   // firebaseからユーザー情報を反映させる
@@ -139,6 +162,8 @@ export const OrderComfirm: FC = () => {
       name: { lastName: lastNameData, firstName: firstNameData },
     });
   };
+
+  console.log(currentUser);
 
   return (
     <div className="orderConfirm">

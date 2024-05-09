@@ -7,11 +7,10 @@ import EmailIcon from "@mui/icons-material/Email";
 import EmojiPeopleIcon from "@mui/icons-material/EmojiPeople";
 import PhoneIcon from "@mui/icons-material/Phone";
 import HomeIcon from "@mui/icons-material/Home";
-import { setDoc, doc, updateDoc, getDoc } from "firebase/firestore";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { registerInfoContext } from "../components/Register/RegisterInfo";
 import "../css/registerUser.css";
-import { auth, db } from "../app/index";
+import { FirebaseTimestamp, auth, db } from "../app/index";
 import axios from "axios";
 import { registerUserNameContext } from "../components/Register/RegisterUserName";
 
@@ -32,7 +31,7 @@ export function RegisterInfo() {
 
   // ユーザー情報をfirebaseに送る
   const sendUserInfo = () => {
-    updateId();
+    // updateId();
     registerUser().then((result) => {
       navigate("/AfterRegister");
     });
@@ -40,14 +39,6 @@ export function RegisterInfo() {
 
   const mailAddress = userData?.registerData.mailAddress;
   const password = userData?.registerData.password;
-
-  // IDを更新する
-  const updateId = async () => {
-    const newestId = await getDoc(doc(db, "userInfoId", "lastId"));
-    await updateDoc(doc(db, "userInfoId", "lastId"), {
-      userId: newestId.data()?.userId + 1,
-    });
-  };
 
   //authnicationへ登録する
   const registerUser = async () => {
@@ -70,9 +61,10 @@ export function RegisterInfo() {
   // ユーザーを登録
   const setUserInfo = async (uid: string) => {
     // IDを取得する
-    const newId = await getDoc(doc(db, "userInfoId", "lastId"));
-    // ユーザー登録
-    await setDoc(doc(db, "userInformation", String(newId.data()?.userId + 1)), {
+    // const newId = await getDoc(doc(db, "userInfoId", "lastId"));
+    const timeStamp = FirebaseTimestamp.now();
+    const initialData = {
+      created_Time: timeStamp,
       id: uid,
       name: userData?.registerData.name,
       email: userData?.registerData.mailAddress,
@@ -80,9 +72,13 @@ export function RegisterInfo() {
       zipcode: userData?.registerData.zipcode,
       address: userData?.registerData.address,
       telephone: userData?.registerData.telephone,
-    }).catch((error) => {
-      console.log(error);
-    });
+    };
+    // ユーザー登録
+    await db
+      .collection("userInformation")
+      .doc(uid)
+      .collection("personal")
+      .add(initialData);
   };
 
   // 住所検索
@@ -98,20 +94,18 @@ export function RegisterInfo() {
     });
   };
 
-  const registerInfos = useContext(registerInfoContext);
-
   // 名前をregisterInfoに格納する
   const sendUserName = (firstNameData?: string, lastNameData?: string) => {
     const fullName = { lastName: lastNameData, firstName: firstNameData };
     if (fullName || (firstNameData && lastNameData)) {
-      registerInfos?.setregisterData({
-        id: registerInfos.registerData.id,
+      userData?.setregisterData({
+        id: userData.registerData.id,
         name: fullName,
-        mailAddress: registerInfos.registerData.mailAddress,
-        password: registerInfos.registerData.password,
-        zipcode: registerInfos.registerData.zipcode,
-        address: registerInfos.registerData.address,
-        telephone: registerInfos.registerData.telephone,
+        mailAddress: userData.registerData.mailAddress,
+        password: userData.registerData.password,
+        zipcode: userData.registerData.zipcode,
+        address: userData.registerData.address,
+        telephone: userData.registerData.telephone,
       });
     } else return;
   };
