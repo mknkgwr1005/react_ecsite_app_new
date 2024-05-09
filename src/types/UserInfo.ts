@@ -1,5 +1,7 @@
+import { Name } from "./Name";
+
 export type UserInfo = {
-  name?: string;
+  name?: Name;
   mailAddress?: string;
   password?: number;
   zipCode?: number;

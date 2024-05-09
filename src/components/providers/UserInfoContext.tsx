@@ -18,7 +18,7 @@ export const UserProvider: React.FC<props> = (props) => {
   const { children } = props;
 
   const [userInfo, setUserInfo] = useState<UserInfo>({
-    name: "",
+    name: { lastName: "", firstName: "" },
     mailAddress: "",
     zipCode: 0,
     address: "",
