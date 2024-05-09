@@ -58,7 +58,9 @@ export function RegisterInfo() {
     }
   };
 
-  // ユーザーを登録
+  /**
+ ユーザーを登録
+ **/
   const setUserInfo = async (uid: string) => {
     // IDを取得する
     // const newId = await getDoc(doc(db, "userInfoId", "lastId"));
@@ -74,11 +76,7 @@ export function RegisterInfo() {
       telephone: userData?.registerData.telephone,
     };
     // ユーザー登録
-    await db
-      .collection("userInformation")
-      .doc(uid)
-      .collection("personal")
-      .add(initialData);
+    await db.collection("userInformation").doc(uid).set(initialData);
   };
 
   // 住所検索

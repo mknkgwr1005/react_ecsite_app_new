@@ -12,18 +12,20 @@ import {
   RadioGroup,
   TextField,
 } from "@material-ui/core";
-import { collection, doc, getDocs, setDoc } from "firebase/firestore";
-import { getFirestore, query, where } from "firebase/firestore";
 import { userContext } from "../components/providers/UserInfoContext";
-import { auth, db } from "../app/index";
+import { FirebaseTimestamp, auth, db } from "../app/index";
 import { cartListContext } from "../components/providers/CartListProvider";
 
 export const OrderComfirm: FC = () => {
+  // firebaseからユーザー情報を反映させる
+  const currentUser = auth.currentUser;
+  const currentUserUid = currentUser?.uid;
+
   const navigate = useNavigate();
   const totalPrice = useTotalPrice();
   //ユーザーが入力した情報
   const userStatus = useContext(userContext);
-  const userItem = useContext(cartListContext);
+  const orderItem = useContext(cartListContext);
 
   //配達時間の表示の為の配列
   const deliveryHourArr = [10, 11, 12, 13, 14, 15, 16, 17, 18];
@@ -62,7 +64,9 @@ export const OrderComfirm: FC = () => {
     setOrderErrorMessage(() => "");
 
     if (currentUser && currentUserUid) {
-      await setDoc(doc(db, "orderInformation", currentUserUid), {
+      const timeStamp = FirebaseTimestamp.now();
+      const orderInformation = {
+        orderDate: timeStamp,
         userId: currentUserUid,
         status: 0,
         totalPrice: totalPrice.finallyTotalPrice,
@@ -73,39 +77,17 @@ export const OrderComfirm: FC = () => {
         destinationTel: userStatus?.userInfo.telephone,
         deliveryTime: deliveryTime,
         paymentMethod: userStatus?.userInfo.paymentMethod,
-        orderItemFormList: userItem?.cartList, //仮
-      }).then(() => navigate("/OrderFinished"));
+        orderItemFormList: orderItem?.cartList, //仮
+      };
+
+      await db
+        .collection(`userInformation`)
+        .doc(currentUserUid)
+        .collection("order")
+        .add(orderInformation)
+        .then(() => navigate("/OrderFinished"));
     } else return;
-
-    // const response = await axios.post(
-    //   `http://153.127.48.168:8080/ecsite-api/order`,
-    //   {
-    //     userId: 0, //仮
-    //     status: 0,
-    //     totalPrice: totalPrice.finallyTotalPrice,
-    //     destinationName: fullName,
-    //     destinationEmail: userStatus?.userInfo.mailAddress,
-    //     destinationZipcode: userStatus?.userInfo.zipCode,
-    //     destinationAddress: userStatus?.userInfo.address,
-    //     destinationTel: userStatus?.userInfo.telephone,
-    //     deliveryTime: deliveryTime,
-    //     paymentMethod: userStatus?.userInfo.paymentMethod,
-    //     orderItemFormList: userItem?.cartList, //仮
-    //   }
-    // );
-    // const status = response.data.status;
-    // console.log(status);
-
-    // if (status === "success") {
-    //   navigate("/orderFinished");
-    // } else {
-    //   setOrderErrorMessage(() => "注文できませんでした。");
-    // }
   };
-
-  // firebaseからユーザー情報を反映させる
-  const currentUser = auth.currentUser;
-  const currentUserUid = currentUser?.uid;
 
   let inputUserName = {
     lastName: "",
@@ -121,21 +103,17 @@ export const OrderComfirm: FC = () => {
    */
 
   const autoComplete = async () => {
-    const userInfoRef = collection(db, "userInformation");
-    // クエリを実行する
-    const filteredData = query(
-      userInfoRef,
-      where("id", "==", `${currentUserUid}`)
-    );
-    // クエリ結果を取得する
-    const filteredSnapshot = await getDocs(filteredData);
-    filteredSnapshot.forEach((doc) => {
-      inputUserName = doc.get("name");
-      inputUserEmail = doc.get("email");
-      inputUserZipCode = doc.get("zipcode");
-      inputUserAddress = doc.get("address");
-      inputUserTelephone = doc.get("telephone");
-    });
+    const userInfoRef = db.collection("userInformation");
+
+    const currentUserData = (
+      await userInfoRef.doc(currentUserUid).get()
+    ).data();
+
+    inputUserName = currentUserData?.name;
+    inputUserEmail = currentUserData?.email;
+    inputUserZipCode = currentUserData?.zipcode;
+    inputUserAddress = currentUserData?.address;
+    inputUserTelephone = currentUserData?.telephone;
 
     // 郵便番号のフォーマット
     const stringZipCode = String(inputUserZipCode);
@@ -162,8 +140,6 @@ export const OrderComfirm: FC = () => {
       name: { lastName: lastNameData, firstName: firstNameData },
     });
   };
-
-  console.log(currentUser);
 
   return (
     <div className="orderConfirm">
