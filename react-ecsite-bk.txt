@@ -1,0 +1,85 @@
+      <TableContainer>
+        <Table
+          sx={{ minWidth: 100 }}
+          aria-label="spanning table"
+          padding="normal"
+          classes="table-layout: fixed"
+        >
+          <TableHead>
+            <TableRow className="table-head">
+              <TableCell id="orderDate">注文日</TableCell>
+              <TableCell id="itemName">商品名</TableCell>
+              <TableCell id="itemSize">サイズ</TableCell>
+              <TableCell id="itemPrice">価格（税抜）</TableCell>
+              <TableCell id="itemQuantity">数量</TableCell>
+              <TableCell id="itemToppingList">トッピング</TableCell>
+              <TableCell id="toppingPrice">価格（税抜）</TableCell>
+              <TableCell id="subTotalPrice">小計</TableCell>
+              <TableCell id="totalPrice">合計</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {orderList.map((order, index) => (
+              <TableRow key={index}>
+                <TableCell scope="row">{order.deliveryTime}</TableCell>
+                {order.orderItemList.map((itemInfo, index) => (
+                  <TableRow key={index}>
+                    <TableCell className="item-name">
+                      {itemInfo.item.name}
+                    </TableCell>
+                    <TableCell className="item-size-price">
+                      ({itemInfo.size})
+                    </TableCell>
+                    <TableCell>
+                      {/* サイズの価格 */}
+                      {(() => {
+                        if (itemInfo.size === "M") {
+                          return <span>{itemInfo.item.priceM}</span>;
+                        } else {
+                          return <span>{itemInfo.item.priceL}</span>;
+                        }
+                      })()}
+                      {/* end of line  */}
+                    </TableCell>
+                    <TableCell>
+                      <span>{itemInfo.quantity}</span>
+                    </TableCell>
+                    {/* orderTopping */}
+                    {(() => {
+                      if (itemInfo.orderToppingList.length !== 0) {
+                        return (
+                          <TableCell className="order-topping">
+                            {itemInfo.orderToppingList.map((topping, index) => (
+                              <TableCell key={index}>
+                                <span>{topping.Topping.name}/</span>
+                                {(() => {
+                                  if (itemInfo.size === "M") {
+                                    return (
+                                      <span>{topping.Topping.priceM}</span>
+                                    );
+                                  } else {
+                                    return (
+                                      <span>{topping.Topping.priceL}</span>
+                                    );
+                                  }
+                                })()}
+                              </TableCell>
+                            ))}
+                          </TableCell>
+                        );
+                      } else {
+                        return (
+                          <TableCell className="order-topping"></TableCell>
+                        );
+                      }
+                    })()}
+                  </TableRow>
+                ))}
+                <TableCell className="order-total-price">
+                  \{order.totalPrice}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>

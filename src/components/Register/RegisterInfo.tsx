@@ -17,7 +17,7 @@ export const RegisterInfo: React.FC<props> = (props) => {
   const { children } = props;
 
   const [registerData, setregisterData] = useState<User>({
-    id: 0,
+    id: "",
     name: { lastName: "", firstName: "" },
     mailAddress: "",
     password: "",

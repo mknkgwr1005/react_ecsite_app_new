@@ -18,6 +18,7 @@ import { EditProvider } from "./components/providers/EditProvider";
 import { RegisterInfo } from "./components/Register/RegisterInfo";
 import { UserProvider } from "./components/providers/UserInfoContext";
 import { RegisterUserName } from "./components/Register/RegisterUserName";
+import { OrderProvider } from "./components/providers/OrderProvider";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -30,9 +31,11 @@ root.render(
         <CartListProvider>
           <RegisterInfo>
             <RegisterUserName>
-              <UserProvider>
-                <App />
-              </UserProvider>
+              <OrderProvider>
+                <UserProvider>
+                  <App />
+                </UserProvider>
+              </OrderProvider>
             </RegisterUserName>
           </RegisterInfo>
         </CartListProvider>
