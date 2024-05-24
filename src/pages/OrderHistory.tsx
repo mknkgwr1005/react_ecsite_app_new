@@ -6,7 +6,7 @@ import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
-import "../../src/css/orderHistory.css";
+import "../css/orderHistory.css";
 
 export const OrderHistory = () => {
   const currentUser = auth.currentUser;
