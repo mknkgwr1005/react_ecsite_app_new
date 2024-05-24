@@ -24,7 +24,8 @@ const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
-  <React.StrictMode>
+  // <React.StrictMode>  開発環境だとuseEffect()が２回レンダリングしてしまうため削除
+  <>
     {/* ProviderのchildrenがAPPになる */}
     <EditProvider>
       <StatusProvider>
@@ -41,5 +42,6 @@ root.render(
         </CartListProvider>
       </StatusProvider>
     </EditProvider>
-  </React.StrictMode>
+  </>
+  // </React.StrictMode>
 );

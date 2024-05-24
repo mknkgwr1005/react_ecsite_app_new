@@ -1,5 +1,5 @@
 import { FirebaseTimestamp, auth, db } from "../app/index";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Order } from "../types/Order";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -24,31 +24,27 @@ export const OrderHistory = () => {
       .collection("userInformation")
       .doc(currentUserUid)
       .get();
-
     const userData = user.data();
 
-    /**
-     * 配列にpushする方法
-     */
     await orderData.get().then((snapshot) => {
       snapshot.forEach((doc) => {
-        const orderData = doc.data();
+        const eachOrder = doc.data();
 
-        setOrderList((beforeOrder) => [
-          ...beforeOrder,
+        setOrderList((prev) => [
+          ...prev,
           {
-            id: orderData.userId,
-            userId: orderData.userId,
-            status: orderData.status,
-            totalPrice: orderData.totalPrice,
-            orderDate: orderData.orderDate,
-            destinationName: orderData.destinationName,
-            destinationEmail: orderData.destinationEmail,
-            destinationZipcode: orderData.destinationZipcode,
-            destinationAddress: orderData.destinationAddress,
-            destinationTel: orderData.destinationTel,
-            deliveryTime: orderData.deliveryTime,
-            paymentMethod: orderData.paymentMethod,
+            id: eachOrder.userId,
+            userId: eachOrder.userId,
+            status: eachOrder.status,
+            totalPrice: eachOrder.totalPrice,
+            orderDate: eachOrder.orderDate,
+            destinationName: eachOrder.destinationName,
+            destinationEmail: eachOrder.destinationEmail,
+            destinationZipcode: eachOrder.destinationZipcode,
+            destinationAddress: eachOrder.destinationAddress,
+            destinationTel: eachOrder.destinationTel,
+            deliveryTime: eachOrder.deliveryTime,
+            paymentMethod: eachOrder.paymentMethod,
             user: {
               id: userData?.id,
               name: userData?.name,
@@ -58,7 +54,7 @@ export const OrderHistory = () => {
               address: userData?.address,
               telephone: userData?.telephone,
             },
-            orderItemList: orderData.orderItemFormList,
+            orderItemList: eachOrder.orderItemFormList,
           },
         ]);
       });
@@ -73,7 +69,7 @@ export const OrderHistory = () => {
     <div>
       <TableContainer>
         <Table
-          sx={{ minWidth: 100, border: 2 }}
+          sx={{ minWidth: 50, border: 2 }}
           aria-label="spanning table"
           padding="normal"
         >
@@ -86,16 +82,16 @@ export const OrderHistory = () => {
             </TableCell>
           </TableRow>
 
-          {orderList.map((order, index) => (
+          {orderList.map((order, orderIndex) => (
             // 注文日
-            <TableRow key={index}>
+            <TableRow key={orderIndex}>
               <TableCell headers="order-date" scope="row">
                 {order.deliveryTime}
               </TableCell>
               {/* 注文内容 */}
-              {order.orderItemList.map((itemInfo, index) => (
+              {order.orderItemList.map((itemInfo, itemIndex) => (
                 <>
-                  <TableRow key={index}>
+                  <TableRow>
                     <TableCell id="item-name" scope="col" align="center">
                       商品
                     </TableCell>
@@ -115,61 +111,73 @@ export const OrderHistory = () => {
                       合計
                     </TableCell>
                   </TableRow>
-                  <TableRow key={index}>
-                    <tr>
-                      <td headers="item-name">
+                  <TableRow key={itemIndex}>
+                    <TableRow>
+                      <TableCell headers="item-name">
                         商品名：{itemInfo.item.name}
                         <br />
                         <img src={itemInfo.item.imagePath} alt="" />
-                      </td>
-                    </tr>
-                    <td headers="item-size">({itemInfo.size})</td>
-                    <td>
+                      </TableCell>
+                    </TableRow>
+                    <TableCell headers="item-size">({itemInfo.size})</TableCell>
+                    <TableCell>
                       {/* サイズの価格 */}
                       {(() => {
                         if (itemInfo.size === "M") {
                           return (
-                            <td headers="itemPrice">
+                            <TableCell headers="itemPrice">
                               ￥{itemInfo.item.priceM}
-                            </td>
+                            </TableCell>
                           );
                         } else {
                           return (
-                            <td headers="itemPrice">
+                            <TableCell headers="itemPrice">
                               ￥{itemInfo.item.priceL}
-                            </td>
+                            </TableCell>
                           );
                         }
                       })()}
                       {/* end of line  */}
-                    </td>
-                    <td>
-                      <td>{itemInfo.quantity}</td>
-                    </td>
+                    </TableCell>
+                    <TableCell>
+                      <TableCell>{itemInfo.quantity}</TableCell>
+                    </TableCell>
                     {/* orderTopping */}
                     {(() => {
                       if (itemInfo.orderToppingList.length !== 0) {
                         return (
-                          <td className="order-topping">
+                          <TableCell className="order-topping">
                             {itemInfo.orderToppingList.map((topping, index) => (
-                              <td key={index}>
-                                <td>{topping.Topping.name}/</td>
+                              <TableCell key={index}>
+                                <TableCell>{topping.Topping.name}/</TableCell>
                                 {(() => {
                                   if (itemInfo.size === "M") {
-                                    return <td>￥{topping.Topping.priceM}</td>;
+                                    return (
+                                      <TableCell>
+                                        ￥{topping.Topping.priceM}
+                                      </TableCell>
+                                    );
                                   } else {
-                                    return <td>￥{topping.Topping.priceL}</td>;
+                                    return (
+                                      <TableCell>
+                                        ￥{topping.Topping.priceL}
+                                      </TableCell>
+                                    );
                                   }
                                 })()}
-                              </td>
+                              </TableCell>
                             ))}
-                          </td>
+                          </TableCell>
                         );
                       } else {
-                        return <td className="order-topping"></td>;
+                        return (
+                          <TableCell className="order-topping"></TableCell>
+                        );
                       }
                     })()}
-                    <td className="order-total-price">￥{order.totalPrice}</td>
+                    <TableCell className="order-total-price">
+                      ￥{order.totalPrice}
+                    </TableCell>
                   </TableRow>
                 </>
               ))}
