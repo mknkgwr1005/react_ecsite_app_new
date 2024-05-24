@@ -1,7 +1,7 @@
 import { Name } from "./Name";
 
 export type User = {
-  id: number;
+  id: string;
   name?: Name;
   mailAddress: string;
   password: string;

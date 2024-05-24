@@ -28,6 +28,7 @@ import { HelpOrder } from "./pages/HelpOrder";
 
 import FrequentQuestion from "./components/FrequentQuestion";
 import { Alergy } from "./pages/Alergy";
+import { OrderHistory } from "./pages/OrderHistory";
 
 function App() {
   return (
@@ -67,6 +68,10 @@ function App() {
             <Route
               path="/EditCartItem/"
               element={<EditCartItem></EditCartItem>}
+            ></Route>
+            <Route
+              path="/OrderHistory"
+              element={<OrderHistory></OrderHistory>}
             ></Route>
           </Routes>
           <Footer></Footer>

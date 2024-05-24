@@ -17,20 +17,20 @@ export const OrderProvider: React.FC<props> = (props) => {
   const { children } = props;
 
   const [orderInfo, setOrderInfo] = useState<Order>({
-    id: 0,
+    id: "",
     userId: 0,
     status: 0,
     totalPrice: 0,
     orderDate: new Date(),
-    distinationName: "",
-    distinationEmail: "",
-    distinationZipcode: "",
-    distinationAddress: "",
-    distinationTel: "",
+    destinationName: "",
+    destinationEmail: "",
+    destinationZipcode: "",
+    destinationAddress: "",
+    destinationTel: "",
     deliveryTime: new Date(),
     paymentMethod: 0,
     user: {
-      id: 0,
+      id: "",
       name: { lastName: "", firstName: "" },
       mailAddress: "",
       password: "",
