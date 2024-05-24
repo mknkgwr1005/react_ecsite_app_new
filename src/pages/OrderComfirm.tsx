@@ -54,6 +54,7 @@ export const OrderComfirm: FC = () => {
    * 商品を注文する.
    */
   const order = async () => {
+    let ordered = false;
     const lastNameStr = userStatus?.userInfo.name?.lastName;
     const firstNameStr = userStatus?.userInfo.name?.firstName;
     let fullName = "";
@@ -85,7 +86,14 @@ export const OrderComfirm: FC = () => {
         .doc(currentUserUid)
         .collection("order")
         .add(orderInformation)
-        .then(() => navigate("/OrderFinished"));
+        .then(() => {
+          ordered = true;
+          navigate("/OrderFinished");
+        });
+    } else return;
+
+    if (ordered) {
+      orderItem?.setCartList([]);
     } else return;
   };
 
