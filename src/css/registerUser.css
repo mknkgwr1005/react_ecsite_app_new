@@ -1,4 +1,9 @@
 #registerUserErrMsg {
   color: red;
   font-weight: bold;
+}
+
+.field {
+  display: flex;
+  justify-content: space-around;
 }/*# sourceMappingURL=registerUser.css.map */

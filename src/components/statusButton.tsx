@@ -2,9 +2,11 @@ import React, { useContext } from "react";
 import { statusContext } from "./providers/statusContext";
 import Button from "@material-ui/core/Button";
 import { signOut } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { userContext } from "../components/providers/UserInfoContext";
 import { auth } from "../app/index";
+import { registerInfoContext } from "./Register/RegisterInfo";
+import { registerUserNameContext } from "./Register/RegisterUserName";
 
 export const StatusButton: React.VFC = () => {
   //ユーザーが入力した情報
@@ -24,6 +26,10 @@ export const StatusButton: React.VFC = () => {
     }
   });
 
+  const pathname = useLocation().pathname;
+  const userData = useContext(registerInfoContext);
+  const userName = useContext(registerUserNameContext);
+
   const clearUserInfo = () => {
     // 入力欄を更新
     userStatus?.setUserInfo({
@@ -34,6 +40,21 @@ export const StatusButton: React.VFC = () => {
       address: "",
       telephone: 0,
     });
+    if (pathname !== "/RegisterUser") {
+      userData?.setregisterData({
+        id: "",
+        name: { lastName: "", firstName: "" },
+        mailAddress: "",
+        password: "",
+        zipcode: "",
+        address: "",
+        telephone: "",
+      });
+      userName?.setregisterName({
+        lastName: "",
+        firstName: "",
+      });
+    } else return;
   };
 
   // ログアウトメソッド
