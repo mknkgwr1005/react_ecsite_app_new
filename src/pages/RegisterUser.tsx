@@ -31,8 +31,20 @@ export function RegisterInfo() {
 
   // ユーザー情報をfirebaseに送る
   const sendUserInfo = () => {
-    // updateId();
     registerUser().then((result) => {
+      userData?.setregisterData({
+        id: "",
+        name: { lastName: "", firstName: "" },
+        mailAddress: "",
+        password: "",
+        zipcode: "",
+        address: "",
+        telephone: "",
+      });
+      userName?.setregisterName({
+        lastName: "",
+        firstName: "",
+      });
       navigate("/AfterRegister");
     });
   };
@@ -166,7 +178,10 @@ export function RegisterInfo() {
                   trigger("firstName");
                 }}
               />
-              <div id="registerUserErrMsg">{errors.name?.message}</div>
+              <div className="field">
+                <span id="registerUserErrMsg">{errors.lastName?.message}</span>
+                <span id="registerUserErrMsg">{errors.firstName?.message}</span>
+              </div>
             </div>
             <br />
 
