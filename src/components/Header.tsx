@@ -1,14 +1,21 @@
-import React from "react";
+import React, { useContext } from "react";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import { useNavigate } from "react-router-dom";
+import { cartListContext } from "./providers/CartListProvider";
 import { StatusButton } from "../components/statusButton";
 import Box, { BoxProps } from "@mui/material/Box";
+import { Badge, IconButton } from "@material-ui/core";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import { statusContext } from "./providers/statusContext";
 
 const Header = (): JSX.Element => {
   const navigate = useNavigate();
+  const cart = useContext(cartListContext);
+  const userStatus = useContext(statusContext);
+
   return (
     <div>
       <AppBar
@@ -33,19 +40,37 @@ const Header = (): JSX.Element => {
               borderRadius: 1,
             }}
           >
-            <Button color="inherit" onClick={() => navigate("/registerUser")}>
-              ユーザー登録
-            </Button>
+            {userStatus?.statusCheck ? (
+              <></>
+            ) : (
+              <Button color="inherit" onClick={() => navigate("/registerUser")}>
+                ユーザー登録
+              </Button>
+            )}
             <StatusButton />
             <Button color="inherit" onClick={() => navigate("/ItemList")}>
               商品一覧
             </Button>
-            <Button color="inherit" onClick={() => navigate("/OrderHistory")}>
-              注文履歴
-            </Button>
-            <Button color="inherit" onClick={() => navigate("/OrderCofirm")}>
-              注文確認画面
-            </Button>
+            {userStatus?.statusCheck ? (
+              <Button color="inherit" onClick={() => navigate("/OrderHistory")}>
+                注文履歴
+              </Button>
+            ) : (
+              <></>
+            )}
+            {userStatus?.statusCheck ? (
+              <IconButton
+                color="primary"
+                aria-label="add to shopping cart"
+                onClick={() => navigate("/CartList")}
+              >
+                <Badge badgeContent={cart?.cartList.length} color="secondary">
+                  <ShoppingCartIcon />
+                </Badge>
+              </IconButton>
+            ) : (
+              <></>
+            )}
           </Box>
         </Toolbar>
       </AppBar>
