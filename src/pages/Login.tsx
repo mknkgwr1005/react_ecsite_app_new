@@ -36,37 +36,47 @@ export const Login = () => {
   const submitLogin = async () => {
     setloginErrorMessage(() => "");
     // 今のセッションが切れたら、ログアウトするオプションを送信する
-    setPersistence(auth, browserSessionPersistence)
-      .then(() => {
-        // Signed in
-        signInWithEmailAndPassword(auth, mailAddress, password);
-        changeStatus?.setstatusCheck(true);
-        navigate("/ItemList");
-      })
-      .catch((error) => {
-        const errorMessage = error.message;
-        console.log(errorMessage);
+    setPersistence(auth, browserSessionPersistence).then(() => {
+      // Signed in
+      signInWithEmailAndPassword(auth, mailAddress, password)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          if (user) {
+            changeStatus?.setstatusCheck(true);
+            navigate("/ItemList");
+          }
+        })
+        .catch((error) => {
+          const errorMessage = error.message;
 
-        if (errorMessage === "Firebase: Error (auth/user-not-found).") {
-          setloginErrorMessage("ユーザーが登録されていません");
-          console.log(errorMessage);
-        } else if (
-          errorMessage === "Firebase: Error (auth/invalid-email)." ||
-          "Firebase: Error (auth/invalid-password)."
-        ) {
-          setloginErrorMessage(
-            "メールアドレスまたはパスワードが間違っています。"
-          );
-        } else if (mailAddress === "" && password !== "") {
-          setloginErrorMessage("メールアドレスを入力してください");
-        } else if (password === "" && mailAddress !== "") {
-          setloginErrorMessage("パスワードを入力してください");
-        } else {
-          setloginErrorMessage(
-            "メールアドレスまたはパスワードを入力してください"
-          );
-        }
-      });
+          if (
+            mailAddress !== "" &&
+            password !== "" &&
+            errorMessage === "Firebase: Error (auth/user-not-found)."
+          ) {
+            setloginErrorMessage("ユーザーが登録されていません");
+          } else if (
+            (mailAddress !== "" &&
+              password !== "" &&
+              errorMessage === "Firebase: Error (auth/invalid-email).") ||
+            (mailAddress !== "" &&
+              password !== "" &&
+              "Firebase: Error (auth/invalid-password).")
+          ) {
+            setloginErrorMessage(
+              "メールアドレスまたはパスワードが間違っています。"
+            );
+          } else if (mailAddress === "" && password !== "") {
+            setloginErrorMessage("メールアドレスを入力してください");
+          } else if (password === "" && mailAddress !== "") {
+            setloginErrorMessage("パスワードを入力してください");
+          } else {
+            setloginErrorMessage(
+              "メールアドレスまたはパスワードを入力してください"
+            );
+          }
+        });
+    });
   };
 
   // firebase認証
