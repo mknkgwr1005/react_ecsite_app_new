@@ -123,12 +123,12 @@ export function RegisterInfo() {
               </label>
 
               <TextField
+                required
                 className="textField"
                 label="姓"
                 variant="outlined"
-                required
                 type="text"
-                {...register("name.lastName", {
+                {...register("lastName", {
                   required: "姓を入力してください",
                 })}
                 value={userName?.registerName.lastName}
@@ -141,16 +141,16 @@ export function RegisterInfo() {
                     userName?.registerName.firstName,
                     e.currentTarget.value
                   );
-                  trigger("name.lastName");
+                  trigger("lastName");
                 }}
               />
               <TextField
+                required
                 className="textField"
                 label="名"
                 variant="outlined"
-                required
                 type="text"
-                {...register("name.firstName", {
+                {...register("firstName", {
                   required: "名を入力してください",
                 })}
                 value={userName?.registerName.firstName}
@@ -163,7 +163,7 @@ export function RegisterInfo() {
                     e.currentTarget.value,
                     userName?.registerName.lastName
                   );
-                  trigger("name.firstName");
+                  trigger("firstName");
                 }}
               />
               <div id="registerUserErrMsg">{errors.name?.message}</div>
