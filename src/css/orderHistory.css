@@ -16,8 +16,10 @@
   margin: 10px;
 }
 
-.TableBody .body {
+.TableBody {
+  table-layout: auto;
   width: 100%;
+  align-items: center;
 }
 
 .per-order-info {

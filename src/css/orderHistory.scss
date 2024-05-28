@@ -17,9 +17,9 @@
 }
 
 .TableBody {
-  .body {
-    width: 100%;
-  }
+  table-layout: auto;
+  width: 100%;
+  align-items: center;
 }
 
 .per-order-info {
