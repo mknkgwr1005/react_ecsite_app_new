@@ -1,7 +1,39 @@
-.root {
+.body {
   text-align: center;
   display: flex;
   align-items: center;
-  flex-direction: column;
-  border-color: black;
+  flex-direction: row;
+}
+
+.TableContainer {
+  margin: 10px;
+  width: 100%;
+  height: auto;
+}
+
+.Table {
+  width: 100%;
+  margin: 10px;
+}
+
+.TableBody {
+  .body {
+    width: 100%;
+  }
+}
+
+.per-order-info {
+  align-content: center;
+}
+
+#order-date,
+#order-detail,
+#item-name,
+#item-size,
+#item-price,
+#item-quantity,
+#item-topping-list,
+#total-price,
+.order-date {
+  font-weight: bold;
 }
