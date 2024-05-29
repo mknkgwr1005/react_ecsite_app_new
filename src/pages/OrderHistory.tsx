@@ -53,6 +53,7 @@ export const OrderHistory = () => {
       snapshot.forEach((doc) => {
         const eachOrder = doc.data();
 
+        const newTimeStamp = new Date(eachOrder.orderDate.toDate());
         setOrderList((prev) => [
           ...prev,
           {
@@ -60,7 +61,7 @@ export const OrderHistory = () => {
             userId: eachOrder.userId,
             status: eachOrder.status,
             totalPrice: eachOrder.totalPrice,
-            orderDate: eachOrder.orderDate,
+            orderDate: newTimeStamp,
             destinationName: eachOrder.destinationName,
             destinationEmail: eachOrder.destinationEmail,
             destinationZipcode: eachOrder.destinationZipcode,
@@ -96,6 +97,9 @@ export const OrderHistory = () => {
             <StyledTableCell scope="col" id="order-date" align="center">
               注文日
             </StyledTableCell>
+            <StyledTableCell scope="col" id="order-date" align="center">
+              お届け日
+            </StyledTableCell>
             <StyledTableCell scope="col" id="order-detail" align="center">
               注文内容
             </StyledTableCell>
@@ -107,6 +111,13 @@ export const OrderHistory = () => {
             <StyledTableRow className="per-order-info" key={orderIndex}>
               <StyledTableCell
                 className="order-date"
+                scope="row"
+                component="th"
+              >
+                {order.orderDate.toLocaleString("ja-JP")}
+              </StyledTableCell>
+              <StyledTableCell
+                className="delivery-date"
                 scope="row"
                 component="th"
               >
