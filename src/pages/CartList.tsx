@@ -5,7 +5,8 @@ import { CartListTable } from "../components/CartListTable";
 import { useTotalPrice } from "../hooks/useTotalPrice";
 import "../css/cartList.css";
 import { cartListContext } from "../components/providers/CartListProvider";
-import { useContext } from "react";
+import { useContext, useState } from "react";
+import { ItemRecommendation } from "./ItemRecommendation";
 
 export const CartList = () => {
   const navigate = useNavigate();
@@ -14,8 +15,17 @@ export const CartList = () => {
   //ショッピングカートの商品の合計金額を取得
   const totalPrice = useTotalPrice();
 
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <Container>
+      <ItemRecommendation open={open} handleClose={handleClose} />
       {cart?.cartList.length !== 0 ? (
         <Box className="cartList">
           <div className="context">
@@ -33,7 +43,7 @@ export const CartList = () => {
                 color="secondary"
                 type="button"
                 onClick={() => {
-                  navigate("/OrderComfirm/");
+                  handleOpen();
                 }}
               >
                 注文に進む

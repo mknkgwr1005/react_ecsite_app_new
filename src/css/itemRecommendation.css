@@ -1,0 +1,28 @@
+.Conatiner {
+  align-items: center;
+}
+
+.item-box {
+  margin: 20px;
+  padding: auto;
+  align-content: space-around;
+}
+
+.item-img {
+  align-items: center;
+}
+
+.cancel-button {
+  display: flex;
+  justify-content: flex-end;
+}
+
+#order-reminder {
+  font-size: large;
+  font-weight: bolder;
+}
+
+#item-name {
+  font-size: medium;
+  font-weight: bold;
+}/*# sourceMappingURL=itemRecommendation.css.map */
