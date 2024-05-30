@@ -56,7 +56,14 @@ function App() {
             />
             <Route
               path="/ItemRecommendation"
-              element={<ItemRecommendation></ItemRecommendation>}
+              element={
+                <ItemRecommendation
+                  open={false}
+                  handleClose={function (): void {
+                    throw new Error("Function not implemented.");
+                  }}
+                ></ItemRecommendation>
+              }
             />
             <Route path="/ErrorPage" element={<ErrorPage />} />
             <Route path="/*" element={<ErrorPage />} />

@@ -74,9 +74,9 @@ export const ItemList = () => {
                         <p>{item.name}</p>
                       </Link>
                     </div>
-                    <span className="price">M</span>:{item.priceM}
+                    <span className="price">Mサイズ</span>:￥{item.priceM}
                     <br />
-                    <span className="price">L</span>:{item.priceL}
+                    <span className="price">Lサイズ</span>:￥{item.priceL}
                     <br />
                     {/* end of itemList */}
                   </div>
