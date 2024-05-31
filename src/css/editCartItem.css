@@ -1,0 +1,24 @@
+.editCartItem {
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.editCartItem .description {
+  display: flex;
+}
+.editCartItem .itemImage {
+  margin-right: 20px;
+}
+.editCartItem .topping {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  width: 80%;
+}
+.editCartItem .button {
+  margin: 20px;
+}
+.editCartItem .button .pushInCartList {
+  margin-right: 20px;
+}/*# sourceMappingURL=editCartItem.css.map */

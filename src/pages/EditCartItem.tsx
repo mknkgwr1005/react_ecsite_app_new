@@ -5,6 +5,17 @@ import { cartListContext } from "../components/providers/CartListProvider";
 import { OrderItem } from "../types/OrderItem";
 import { OrderTopping } from "../types/OrderTopping";
 import { EditContext } from "../components/providers/EditProvider";
+import "../css/editCartItem.css";
+import {
+  Button,
+  FormControl,
+  FormControlLabel,
+  FormGroup,
+  InputLabel,
+  MenuItem,
+  Select,
+} from "@material-ui/core";
+import Checkbox from "@mui/material/Checkbox";
 
 export const EditCartItem: FC = () => {
   //画面遷移のメソッド化
@@ -13,7 +24,6 @@ export const EditCartItem: FC = () => {
   //編集するオーダー商品を取得
   const editOrderItem = useContext(EditContext);
   const orderItem = editOrderItem?.editOrderItem;
-  console.log(orderItem);
 
   // サイズの初期値
   const [size, setSize] = useState<string>();
@@ -51,13 +61,10 @@ export const EditCartItem: FC = () => {
       }
     }
     setselectedToppingIdList(idArr);
-    console.log(idArr);
   }, []);
 
   //選択したトッピングのIDをトッピングIDリストに格納する
   const getSelectedTopping = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.checked);
-
     if (event.target.checked === true) {
       const toppingId: number = Number(event.target.value);
       const selectedToppingIdList2 = selectedToppingIdList;
@@ -73,7 +80,6 @@ export const EditCartItem: FC = () => {
       }
       setselectedToppingIdList(() => selectedToppingIdList2);
     }
-    console.log("トッピングを選択" + selectedToppingIdList);
   };
 
   // 数量
@@ -171,7 +177,7 @@ export const EditCartItem: FC = () => {
   }, [size, quantity]);
 
   return (
-    <div>
+    <div className="editCartItem">
       <h1>{orderItem?.item?.name}</h1>
       <img className="itemImage" src={orderItem?.item?.imagePath} alt="test" />
       <p>{orderItem?.item?.description}</p>
@@ -198,75 +204,80 @@ export const EditCartItem: FC = () => {
       />
       <label htmlFor="L">L {orderItem?.item?.priceL}円</label>
       <div>トッピング： 1つにつき Ｍ 200円(税抜) Ｌ 300 円(税抜)</div>
-      {orderItem?.item.toppingList?.map((topping, index) => {
-        let checked = false;
-        for (const topping2 of orderItem.orderToppingList) {
-          if (topping2.Topping.id === topping.id) {
-            checked = true;
+      <div className="topping">
+        {orderItem?.item.toppingList?.map((topping, index) => {
+          let checked = false;
+          for (const topping2 of orderItem.orderToppingList) {
+            if (topping2.Topping.id === topping.id) {
+              checked = true;
+            }
           }
-        }
-        return (
-          <div>
-            <label key={index}>
-              <input
-                defaultChecked={checked}
-                type="checkbox"
-                // チェックが入った値を取得
-                onChange={(e) => {
-                  getSelectedTopping(e);
-                  changeTotalPrice();
-                }}
-                value={topping.id}
+          return (
+            <FormGroup key={index}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    defaultChecked={checked}
+                    onChange={(e) => {
+                      getSelectedTopping(e);
+                      changeTotalPrice();
+                    }}
+                    value={topping.id}
+                  />
+                }
+                label={topping.name}
               />
-              <span>{topping.name}</span>
-            </label>
-          </div>
-        );
-      })}
-      <div>
-        ; 数量
-        <select
+            </FormGroup>
+          );
+        })}
+      </div>
+      <FormControl>
+        <InputLabel id="pizzaQuantity">数量</InputLabel>
+        <Select
           className="quantity"
-          name="quantity"
-          id="pizzaQuantity"
+          label="quantity"
+          labelId="pizzaQuantity"
           onChange={(e) => {
             setQuantity(Number(e.target.value));
             changeTotalPrice();
           }}
           defaultValue={Number(orderItem?.quantity)}
         >
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-          <option value="6">6</option>
-          <option value="7">7</option>
-          <option value="8">8</option>
-          <option value="9">9</option>
-          <option value="10">10</option>
-          <option value="11">11</option>
-          <option value="12">12</option>
-        </select>
-      </div>
+          <MenuItem value={1}>1</MenuItem>
+          <MenuItem value={2}>2</MenuItem>
+          <MenuItem value={3}>3</MenuItem>
+          <MenuItem value={4}>4</MenuItem>
+          <MenuItem value={5}>5</MenuItem>
+          <MenuItem value={6}>6</MenuItem>
+          <MenuItem value={7}>7</MenuItem>
+          <MenuItem value={8}>8</MenuItem>
+          <MenuItem value={9}>9</MenuItem>
+          <MenuItem value={10}>10</MenuItem>
+          <MenuItem value={11}>11</MenuItem>
+          <MenuItem value={12}>12</MenuItem>
+        </Select>
+      </FormControl>
       <div>この商品金額： {totalPrice}円（税抜）</div>
       <div>
-        <button
+        <Button
+          variant="contained"
+          color="secondary"
           onClick={() => {
             pushInCartList();
           }}
         >
           編集する
-        </button>
+        </Button>
       </div>
       <div>
-        <button
+        <Button
+          variant="contained"
           onClick={() => {
             navigate("/itemList/");
           }}
         >
           商品一覧に戻る
-        </button>
+        </Button>
       </div>
     </div>
   );
