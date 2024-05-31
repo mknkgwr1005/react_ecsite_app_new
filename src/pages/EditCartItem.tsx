@@ -11,9 +11,12 @@ import {
   FormControl,
   FormControlLabel,
   FormGroup,
+  FormLabel,
   InputLabel,
   MenuItem,
   Select,
+  RadioGroup,
+  Radio,
 } from "@material-ui/core";
 import Checkbox from "@mui/material/Checkbox";
 
@@ -181,28 +184,40 @@ export const EditCartItem: FC = () => {
       <h1>{orderItem?.item?.name}</h1>
       <img className="itemImage" src={orderItem?.item?.imagePath} alt="test" />
       <p>{orderItem?.item?.description}</p>
-      <input
-        id="M"
-        name="size"
-        type="radio"
-        value="M"
-        checked={hasSize}
-        onChange={(e) => {
-          changeSize(e);
-        }}
-      />
-      <label htmlFor="M"> M {orderItem?.item?.priceM}円</label>
-      <input
-        id="L"
-        name="size"
-        type="radio"
-        value="L"
-        checked={!hasSize}
-        onChange={(e) => {
-          changeSize(e);
-        }}
-      />
-      <label htmlFor="L">L {orderItem?.item?.priceL}円</label>
+      <FormControl>
+        <FormLabel id="itemSize">サイズ</FormLabel>
+        <RadioGroup
+          row
+          aria-labelledby="itemSize"
+          defaultValue="M"
+          name="itemSizeGroup"
+        >
+          <FormControlLabel
+            value="M"
+            label={"M" + " " + orderItem?.item?.priceM + "円"}
+            control={
+              <Radio
+                checked={hasSize}
+                onChange={(e) => {
+                  changeSize(e);
+                }}
+              />
+            }
+          />
+          <FormControlLabel
+            value="L"
+            label={"L" + " " + orderItem?.item.priceL + "円"}
+            control={
+              <Radio
+                checked={!hasSize}
+                onChange={(e) => {
+                  changeSize(e);
+                }}
+              />
+            }
+          />
+        </RadioGroup>
+      </FormControl>
       <div>トッピング： 1つにつき Ｍ 200円(税抜) Ｌ 300 円(税抜)</div>
       <div className="topping">
         {orderItem?.item.toppingList?.map((topping, index) => {
