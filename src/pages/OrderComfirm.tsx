@@ -31,6 +31,10 @@ export const OrderComfirm: FC = () => {
   const deliveryHourArr = [10, 11, 12, 13, 14, 15, 16, 17, 18];
   //注文のAPIの配達日時フォーマット
   const [deliveryTime, setDeliveryTime] = useState("");
+  const [today, setToday] = useState(new Date());
+  const [dateisCorrect, setDateisCorrext] = useState(false);
+  const [handleOrderButton, setHandleOrderButton] = useState(true);
+
   // deliveryDateとdeliveryHourを注文のAPIのフォーマットに整形
   useEffect(() => {
     setDeliveryTime(() => {
@@ -49,6 +53,20 @@ export const OrderComfirm: FC = () => {
 
   //注文失敗時のエラーメッセージ
   const [orderErrorMessage, setOrderErrorMessage] = useState("");
+
+  /**
+   * 日付指定のときに、同じ条件で比較するために今日の日付のHMSMを設定する
+   */
+  const setTodaysHour = () => {
+    today.setHours(9);
+    today.setMinutes(0);
+    today.setSeconds(0);
+    today.setMilliseconds(0);
+  };
+
+  const handleTodayDate = () => {
+    setToday(new Date());
+  };
 
   /**
    * 商品を注文する.
@@ -268,6 +286,18 @@ export const OrderComfirm: FC = () => {
                 type="date"
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   userStatus?.setUserInfo(() => {
+                    setTodaysHour();
+                    const selectedDate = new Date(e.target.value);
+                    if (selectedDate < today) {
+                      setOrderErrorMessage(
+                        "本日以降の日にちを指定してください"
+                      );
+                      setDateisCorrext(false);
+                    } else {
+                      setOrderErrorMessage("");
+                      handleTodayDate();
+                      setDateisCorrext(true);
+                    }
                     const deliveryDate = format(
                       new Date(e.target.value),
                       "yyyy-MM-dd"
@@ -295,9 +325,22 @@ export const OrderComfirm: FC = () => {
                     control={
                       <Radio
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                          userStatus?.setUserInfo({
-                            ...userStatus?.userInfo,
-                            deliveryHour: Number(e.target.value),
+                          userStatus?.setUserInfo(() => {
+                            const todaysHour = today.getHours();
+                            const selectedHour = Number(e.target.value);
+
+                            if (dateisCorrect && selectedHour < todaysHour) {
+                              setOrderErrorMessage(
+                                "正しい時間を指定してください"
+                              );
+                            } else {
+                              setOrderErrorMessage("");
+                              setHandleOrderButton(false);
+                            }
+                            return {
+                              ...userStatus?.userInfo,
+                              deliveryHour: Number(e.target.value),
+                            };
                           })
                         }
                         required
@@ -351,7 +394,12 @@ export const OrderComfirm: FC = () => {
           </div>
           <div className="orderButton">
             <div>{orderErrorMessage}</div>
-            <Button type="button" variant="contained" onClick={order}>
+            <Button
+              type="button"
+              variant="contained"
+              onClick={order}
+              disabled={handleOrderButton}
+            >
               この内容で注文する
             </Button>
           </div>
