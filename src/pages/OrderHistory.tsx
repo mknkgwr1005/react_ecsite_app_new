@@ -3,6 +3,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Order } from "../types/Order";
 import "../css/orderHistory.css";
 import { OrderTable } from "../components/OrderTable";
+import { Loading } from "../components/Loading";
 
 export const OrderHistory = () => {
   const currentUser = auth.currentUser;
@@ -104,18 +105,30 @@ export const OrderHistory = () => {
   };
 
   useEffect(() => {
-    getOrderHistory();
+    console.log(orderList.length);
+
+    setInterval(() => {
+      getOrderHistory();
+    }, 800);
   }, [currentPage, productsPerPage, currentUserUid]);
 
-  return (
-    <>
-      <OrderTable
-        orderList={orderList}
-        currentPage={currentPage}
-        orderLength={orderLength}
-        productsPerPage={productsPerPage}
-        changePage={changePage}
-      />
-    </>
-  );
+  if (orderList.length !== 0) {
+    return (
+      <>
+        <OrderTable
+          orderList={orderList}
+          currentPage={currentPage}
+          orderLength={orderLength}
+          productsPerPage={productsPerPage}
+          changePage={changePage}
+        />
+      </>
+    );
+  } else {
+    return (
+      <>
+        <Loading />
+      </>
+    );
+  }
 };

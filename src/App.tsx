@@ -29,6 +29,7 @@ import { HelpOrder } from "./pages/HelpOrder";
 import FrequentQuestion from "./components/FrequentQuestion";
 import { Alergy } from "./pages/Alergy";
 import { OrderHistory } from "./pages/OrderHistory";
+import { Loading } from "./components/Loading";
 
 function App() {
   return (
@@ -80,6 +81,7 @@ function App() {
               path="/OrderHistory"
               element={<OrderHistory></OrderHistory>}
             ></Route>
+            <Route path="/Loading" element={<Loading></Loading>}></Route>
           </Routes>
           <Footer></Footer>
         </BrowserRouter>

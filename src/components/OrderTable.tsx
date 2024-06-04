@@ -48,32 +48,31 @@ export const OrderTable = ({
   return (
     <TableContainer className="TableContainer" component={Paper}>
       <Table aria-label="customized table" padding="normal">
-        <TableHead id="order-header">
+        <TableHead id="orderHeader">
           <TableRow>
-            <StyledTableCell scope="col" id="order-date" align="center">
+            <StyledTableCell scope="col" id="orderDate" align="center">
               注文日
             </StyledTableCell>
-            <StyledTableCell scope="col" id="order-date" align="center">
+            <StyledTableCell scope="col" id="orderDate" align="center">
               お届け日
             </StyledTableCell>
-            <StyledTableCell scope="col" id="order-detail" align="center">
+            <StyledTableCell scope="col" id="orderDetail" align="center">
               注文内容
+            </StyledTableCell>
+            <StyledTableCell scope="col" id="orderTotalPrice" align="center">
+              合計金額（税込）
             </StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {orderList.map((order, orderIndex) => (
             // 注文日
-            <StyledTableRow className="per-order-info" key={orderIndex}>
-              <StyledTableCell
-                className="order-date"
-                scope="row"
-                component="th"
-              >
+            <StyledTableRow className="perOrderInfo" key={orderIndex}>
+              <StyledTableCell className="orderDate" scope="row" component="th">
                 {order.orderDate.toLocaleString("ja-JP")}
               </StyledTableCell>
               <StyledTableCell
-                className="delivery-date"
+                className="deliveryDate"
                 scope="row"
                 component="th"
               >
@@ -82,35 +81,28 @@ export const OrderTable = ({
               {/* 注文内容 */}
               {order.orderItemList.map((itemInfo, itemIndex) => (
                 <>
-                  <TableRow className="order-header">
-                    <StyledTableCell id="item-name" scope="col" align="center">
+                  <TableRow className="orderHeader">
+                    <StyledTableCell id="itemName" scope="col" align="center">
                       商品
                     </StyledTableCell>
-                    <StyledTableCell id="item-size" scope="col" align="center">
+                    <StyledTableCell id="itemSize" scope="col" align="center">
                       サイズ
                     </StyledTableCell>
-                    <StyledTableCell id="item-price" scope="col" align="center">
+                    <StyledTableCell id="itemPrice" scope="col" align="center">
                       価格（税抜）
                     </StyledTableCell>
                     <StyledTableCell
-                      id="item-quantity"
+                      id="itemQuantity"
                       scope="col"
                       align="center"
                     >
                       数量
                     </StyledTableCell>
-                    <StyledTableCell id="item-topping-list" scope="col">
+                    <StyledTableCell id="itemToppingList" scope="col">
                       トッピング／価格
                     </StyledTableCell>
-                    <StyledTableCell
-                      id="total-price"
-                      scope="col"
-                      align="center"
-                    >
-                      合計
-                    </StyledTableCell>
                   </TableRow>
-                  <StyledTableRow className="per-item-info" key={itemIndex}>
+                  <StyledTableRow className="perItemInfo" key={itemIndex}>
                     <StyledTableCell>
                       <div>
                         商品名：{itemInfo.item.name}
@@ -118,7 +110,7 @@ export const OrderTable = ({
                         <img src={itemInfo.item.imagePath} alt="" />
                       </div>
                     </StyledTableCell>
-                    <StyledTableCell headers="item-size">
+                    <StyledTableCell headers="itemSize">
                       ({itemInfo.size})
                     </StyledTableCell>
                     <>
@@ -145,7 +137,7 @@ export const OrderTable = ({
                     {(() => {
                       if (itemInfo.orderToppingList.length !== 0) {
                         return (
-                          <StyledTableCell className="order-topping">
+                          <StyledTableCell className="orderTopping">
                             {itemInfo.orderToppingList.map((topping, index) => (
                               <StyledTableCell
                                 key={index}
@@ -172,16 +164,16 @@ export const OrderTable = ({
                         );
                       } else {
                         return (
-                          <StyledTableCell className="order-topping"></StyledTableCell>
+                          <StyledTableCell className="orderTopping"></StyledTableCell>
                         );
                       }
                     })()}
-                    <StyledTableCell className="order-total-price">
-                      ￥{order.totalPrice}
-                    </StyledTableCell>
                   </StyledTableRow>
                 </>
               ))}
+              <StyledTableCell className="orderTotalPrice">
+                ￥{order.totalPrice}
+              </StyledTableCell>
             </StyledTableRow>
           ))}
           <Pagination
