@@ -26,14 +26,14 @@
   align-content: center;
 }
 
-#order-date,
-#order-detail,
-#item-name,
-#item-size,
-#item-price,
-#item-quantity,
-#item-topping-list,
-#total-price,
+#orderDate,
+#orderDetail,
+#itemName,
+#itemDize,
+#itemPrice,
+#itemQuantity,
+#itemTopping-list,
+#orderTotalPrice,
 .order-date {
   font-weight: bold;
 }/*# sourceMappingURL=orderHistory.css.map */

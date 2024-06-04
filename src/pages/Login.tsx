@@ -91,8 +91,6 @@ export const Login = () => {
     signInWithPopup(authrization, providerTwitter)
       .then((result) => {
         if (result.operationType === "signIn") {
-          console.log(result);
-          console.log("twitterログイン成功");
           changeStatus?.setstatusCheck(true);
           navigate("/ItemList");
         }
@@ -100,7 +98,6 @@ export const Login = () => {
       .catch((error) => {
         // Handle Errors here.
         const errorMessage = error.message;
-        console.log(error);
         alert(
           `"Twitterでログインできませんでした。"+"エラーメッセージ："+${errorMessage}`
         );
@@ -114,7 +111,6 @@ export const Login = () => {
     signInWithPopup(authrization, providerFacebook)
       .then((result) => {
         if (result.operationType === "signIn") {
-          console.log("facebookログイン成功");
           changeStatus?.setstatusCheck(true);
           navigate("/ItemList");
         }
@@ -122,7 +118,6 @@ export const Login = () => {
       .catch((error) => {
         // Handle Errors here.
         const errorMessage = error.message;
-        console.log(error);
         alert(
           `"Twitterでログインできませんでした。"+"エラーメッセージ："+${errorMessage}`
         );

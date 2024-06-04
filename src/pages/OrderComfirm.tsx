@@ -268,8 +268,6 @@ export const OrderComfirm: FC = () => {
                 type="date"
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   userStatus?.setUserInfo(() => {
-                    console.log(e.target.value);
-
                     const deliveryDate = format(
                       new Date(e.target.value),
                       "yyyy-MM-dd"
