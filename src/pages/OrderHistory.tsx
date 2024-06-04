@@ -105,10 +105,8 @@ export const OrderHistory = () => {
   };
 
   useEffect(() => {
-    setInterval(() => {
-      getOrderHistory();
-    }, 800);
-  }, [currentPage, productsPerPage, currentUserUid]);
+    getOrderHistory();
+  }, [currentPage]);
 
   if (orderList.length !== 0) {
     return (
