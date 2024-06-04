@@ -17,13 +17,10 @@ export const InputLogin = async () => {
   const status = response.data.status;
 
   if (status === "success") {
-    console.log("成功");
     navigate("/ItemList");
   } else if (status === "error") {
-    console.log("1");
     alert("メールアドレス、パスワードが一致しません");
   } else {
-    console.log("2");
     alert("メールアドレス、パスワードを記入してください");
   }
 

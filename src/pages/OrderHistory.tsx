@@ -105,8 +105,6 @@ export const OrderHistory = () => {
   };
 
   useEffect(() => {
-    console.log(orderList.length);
-
     setInterval(() => {
       getOrderHistory();
     }, 800);

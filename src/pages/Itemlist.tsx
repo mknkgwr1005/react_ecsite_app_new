@@ -31,7 +31,6 @@ export const ItemList = () => {
 
   useEffect(() => {
     changePage(1);
-    // console.log("aaa");
   }, [itemList]);
 
   useEffect(() => {

@@ -17,7 +17,6 @@ export const OrderItemSize: FC<props> = (props) => {
     } else if (orderItemSize === "L") {
       setPrice(priceL);
     }
-    console.log("サイズのコンポーネント");
   }, [orderItemSize, priceM, priceL]);
 
   return <>{price}円</>;
