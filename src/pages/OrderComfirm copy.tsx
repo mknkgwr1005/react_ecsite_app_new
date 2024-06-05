@@ -16,24 +16,28 @@ import { userContext } from "../components/providers/UserInfoContext";
 import { FirebaseTimestamp, auth, db } from "../app/index";
 import { cartListContext } from "../components/providers/CartListProvider";
 
-export const OrderConfirm: FC = () => {
+export const OrderComfirm: FC = () => {
+  // firebaseからユーザー情報を反映させる
   const currentUser = auth.currentUser;
   const currentUserUid = currentUser?.uid;
 
   const navigate = useNavigate();
   const totalPrice = useTotalPrice();
+  //ユーザーが入力した情報
   const userStatus = useContext(userContext);
   const orderItem = useContext(cartListContext);
 
+  //配達時間の表示の為の配列
   const deliveryHourArr = [10, 11, 12, 13, 14, 15, 16, 17, 18];
+  //注文のAPIの配達日時フォーマット
   const [deliveryTime, setDeliveryTime] = useState("");
   const [today, setToday] = useState(new Date());
-  const [dateIsCorrect, setDateIsCorrect] = useState(false);
-  const [timeIsCorrect, setTimeIsCorrect] = useState(false);
+  const [dateisCorrect, setDateisCorrext] = useState(false);
+  const [timeisCorrect, setTimeisCorrext] = useState(false);
   const [handleOrderButton, setHandleOrderButton] = useState(true);
-  const [itIsToday, setItIsToday] = useState(false);
-  const [orderErrorMessage, setOrderErrorMessage] = useState("");
+  const [itIsToday, setItIsToday] = useState(true);
 
+  // deliveryDateとdeliveryHourを注文のAPIのフォーマットに整形
   useEffect(() => {
     setDeliveryTime(() => {
       const deliveryTime = format(
@@ -50,15 +54,21 @@ export const OrderConfirm: FC = () => {
   }, [userStatus?.userInfo.deliveryDate, userStatus?.userInfo.deliveryHour]);
 
   useEffect(() => {
-    if (dateIsCorrect && timeIsCorrect && userStatus) {
+    if (dateisCorrect && timeisCorrect && userStatus) {
       setHandleOrderButton(false);
     } else {
       setHandleOrderButton(true);
     }
-  }, [dateIsCorrect, userStatus, timeIsCorrect]);
+  }, [dateisCorrect, userStatus, timeisCorrect]);
 
+  //注文失敗時のエラーメッセージ
+  const [orderErrorMessage, setOrderErrorMessage] = useState("");
+
+  /**
+   * 日付指定のときに、同じ条件で比較するために今日の日付のHMSMを設定する
+   */
   const setTodaysHour = () => {
-    today.setHours(0);
+    today.setHours(9);
     today.setMinutes(0);
     today.setSeconds(0);
     today.setMilliseconds(0);
@@ -69,23 +79,22 @@ export const OrderConfirm: FC = () => {
   };
 
   const handleButton = (selectedHour: number) => {
-    handleTodayDate();
     const todaysHour = today.getHours();
-    if (
-      (dateIsCorrect && !itIsToday) ||
-      (itIsToday && selectedHour > todaysHour)
-    ) {
-      setTimeIsCorrect(true);
+    if (dateisCorrect && !itIsToday) {
+      setTimeisCorrext(true);
       setOrderErrorMessage("");
-    } else if (itIsToday && dateIsCorrect && selectedHour < todaysHour) {
+    } else if (itIsToday && dateisCorrect && selectedHour < todaysHour) {
       setOrderErrorMessage("正しい時間を指定してください");
-      setTimeIsCorrect(false);
+      setTimeisCorrext(false);
     } else {
       setOrderErrorMessage("正しい時間を指定してください");
-      setTimeIsCorrect(false);
+      setTimeisCorrext(false);
     }
   };
 
+  /**
+   * 商品を注文する.
+   */
   const order = async () => {
     let ordered = false;
     const lastNameStr = userStatus?.userInfo.name?.lastName;
@@ -111,7 +120,7 @@ export const OrderConfirm: FC = () => {
         destinationTel: userStatus?.userInfo.telephone,
         deliveryTime: deliveryTime,
         paymentMethod: userStatus?.userInfo.paymentMethod,
-        orderItemFormList: orderItem?.cartList,
+        orderItemFormList: orderItem?.cartList, //仮
       };
 
       await db
@@ -130,6 +139,19 @@ export const OrderConfirm: FC = () => {
     } else return;
   };
 
+  let inputUserName = {
+    lastName: "",
+    firstName: "",
+  };
+  let inputUserEmail = "";
+  let inputUserZipCode = 0;
+  let inputUserAddress = "";
+  let inputUserTelephone = 0;
+
+  /**
+   * 自動入力
+   */
+
   const autoComplete = async () => {
     const userInfoRef = db.collection("userInformation");
 
@@ -137,16 +159,20 @@ export const OrderConfirm: FC = () => {
       await userInfoRef.doc(currentUserUid).get()
     ).data();
 
-    const inputUserName = currentUserData?.name;
-    const inputUserEmail = currentUserData?.email;
-    const inputUserZipCode = currentUserData?.zipcode;
-    const inputUserAddress = currentUserData?.address;
-    const inputUserTelephone = currentUserData?.telephone;
+    inputUserName = currentUserData?.name;
+    inputUserEmail = currentUserData?.email;
+    inputUserZipCode = currentUserData?.zipcode;
+    inputUserAddress = currentUserData?.address;
+    inputUserTelephone = currentUserData?.telephone;
 
+    // 郵便番号のフォーマット
     const stringZipCode = String(inputUserZipCode);
     const formatZipCode = stringZipCode.replace("-", "");
     const numberZipCode = Number(formatZipCode);
 
+    // 名前のフォーマット
+
+    // 入力欄を更新
     userStatus?.setUserInfo({
       ...userStatus?.userInfo,
       name: inputUserName,
@@ -157,6 +183,7 @@ export const OrderConfirm: FC = () => {
     });
   };
 
+  // Stateに名前を送信する
   const setUserName = (lastNameData?: string, firstNameData?: string) => {
     userStatus?.setUserInfo({
       ...userStatus.userInfo,
@@ -167,7 +194,7 @@ export const OrderConfirm: FC = () => {
   return (
     <div className="orderConfirm">
       <div className="context">
-        <CartListTable hasButton={false} />
+        <CartListTable hasButton={false}></CartListTable>
         <div>
           <div>消費税：{totalPrice.TAXOfTotalPrice}円</div>
           <div>ご注文金額合計：{totalPrice.finallyTotalPrice}円 (税込)</div>
@@ -247,7 +274,7 @@ export const OrderConfirm: FC = () => {
                 id="address"
                 type="text"
                 value={userStatus?.userInfo.address}
-                onChange={(e) =>
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   userStatus?.setUserInfo({
                     ...userStatus?.userInfo,
                     address: e.target.value,
@@ -264,7 +291,7 @@ export const OrderConfirm: FC = () => {
               id="tel"
               type="number"
               value={userStatus?.userInfo.telephone}
-              onChange={(e) =>
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 userStatus?.setUserInfo({
                   ...userStatus?.userInfo,
                   telephone: Number(e.target.value),
@@ -277,39 +304,36 @@ export const OrderConfirm: FC = () => {
               <h2>---配達日時---</h2>
               <TextField
                 className="textField"
+                // label="deliveryDate"
                 variant="outlined"
                 id="deliveryDate"
                 type="date"
-                onChange={(e) => {
-                  setTodaysHour();
-                  const selectedDate = new Date(e.target.value);
-                  if (selectedDate < today) {
-                    setOrderErrorMessage("本日以降の日にちを指定してください");
-                    setDateIsCorrect(false);
-                    setItIsToday(false);
-                  } else if (
-                    selectedDate.getFullYear() === today.getFullYear() &&
-                    selectedDate.getMonth() === today.getMonth() &&
-                    selectedDate.getDate() === today.getDate()
-                  ) {
-                    setOrderErrorMessage("");
-                    setItIsToday(true);
-                    setDateIsCorrect(true);
-                  } else {
-                    setOrderErrorMessage("");
-                    handleTodayDate();
-                    setDateIsCorrect(true);
-                    setItIsToday(false);
-                  }
-                  const deliveryDate = format(
-                    new Date(e.target.value),
-                    "yyyy-MM-dd"
-                  );
-                  userStatus?.setUserInfo({
-                    ...userStatus?.userInfo,
-                    deliveryDate: deliveryDate,
-                  });
-                }}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  userStatus?.setUserInfo(() => {
+                    setTodaysHour();
+                    const selectedDate = new Date(e.target.value);
+                    if (selectedDate < today) {
+                      setOrderErrorMessage(
+                        "本日以降の日にちを指定してください"
+                      );
+                      setDateisCorrext(false);
+                    } else if (selectedDate === today) {
+                      setItIsToday(true);
+                    } else {
+                      setOrderErrorMessage("");
+                      handleTodayDate();
+                      setDateisCorrext(true);
+                    }
+                    const deliveryDate = format(
+                      new Date(e.target.value),
+                      "yyyy-MM-dd"
+                    );
+                    return {
+                      ...userStatus?.userInfo,
+                      deliveryDate: deliveryDate,
+                    };
+                  })
+                }
               />
             </div>
             <FormControl>
@@ -319,20 +343,24 @@ export const OrderConfirm: FC = () => {
                 defaultValue="10"
                 name="radio-buttons-group"
               >
-                {deliveryHourArr.map((time, index) => (
+                {deliveryHourArr.map((time: number, index: number) => (
                   <FormControlLabel
+                    // 一意なvalueを与えないとチェックが入らない
                     value={time.toString()}
                     key={index}
                     control={
                       <Radio
-                        onChange={(e) => {
-                          const selectedHour = Number(e.target.value);
-                          handleButton(selectedHour);
-                          userStatus?.setUserInfo({
-                            ...userStatus?.userInfo,
-                            deliveryHour: selectedHour,
-                          });
-                        }}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                          userStatus?.setUserInfo(() => {
+                            const selectedHour = Number(e.target.value);
+                            console.log("dateisCorrect", dateisCorrect);
+                            handleButton(selectedHour);
+                            return {
+                              ...userStatus?.userInfo,
+                              deliveryHour: Number(e.target.value),
+                            };
+                          })
+                        }
                         required
                       />
                     }
@@ -355,7 +383,7 @@ export const OrderConfirm: FC = () => {
                   value="1"
                   control={
                     <Radio
-                      onChange={(e) =>
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                         userStatus?.setUserInfo({
                           ...userStatus?.userInfo,
                           paymentMethod: Number(e.target.value),
@@ -369,7 +397,7 @@ export const OrderConfirm: FC = () => {
                   value="2"
                   control={
                     <Radio
-                      onChange={(e) =>
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                         userStatus?.setUserInfo({
                           ...userStatus?.userInfo,
                           paymentMethod: Number(e.target.value),
