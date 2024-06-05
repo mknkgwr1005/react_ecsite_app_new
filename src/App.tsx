@@ -4,7 +4,7 @@ import Header from "./components/Header";
 import { Login } from "./pages/Login";
 import { Toppage } from "./pages/Toppage";
 import { ItemList } from "./pages/Itemlist";
-import { OrderComfirm } from "./pages/OrderComfirm";
+import { OrderConfirm } from "./pages/OrderComfirm";
 import { OrderFinished } from "./pages/OrderFinished";
 import { RegisterInfo } from "./pages/RegisterUser";
 import { AfterRegister } from "./pages/AfterRegister";
@@ -46,7 +46,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route
               path="/OrderComfirm"
-              element={<OrderComfirm></OrderComfirm>}
+              element={<OrderConfirm></OrderConfirm>}
             />
             <Route path="/ItemList" element={<ItemList />} />
             <Route path="/ItemDetail/:itemId" element={<ItemDetail />} />
