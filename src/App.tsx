@@ -81,7 +81,10 @@ function App() {
               path="/OrderHistory"
               element={<OrderHistory></OrderHistory>}
             ></Route>
-            <Route path="/Loading" element={<Loading></Loading>}></Route>
+            <Route
+              path="/Loading"
+              element={<Loading noOrderHistory={false}></Loading>}
+            ></Route>
           </Routes>
           <Footer></Footer>
         </BrowserRouter>

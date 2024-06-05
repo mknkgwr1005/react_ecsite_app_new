@@ -22,6 +22,8 @@ export const OrderHistory = () => {
   const [currentPage, setCurrentPage] = useState(1);
   // 注文データの全体の件数
   const [orderLength, setOrderLength] = useState(1);
+  // 注文履歴があるかの変数
+  const [noOrderHistory, setNoOrderHistory] = useState(false);
 
   /**
    * 注文情報を表示する
@@ -40,8 +42,9 @@ export const OrderHistory = () => {
         currentPage === 1
       ) {
         query = query.limit(productsPerPage);
+      } else if (allProductLength === 0) {
+        setNoOrderHistory(true);
       }
-
       // ほかのページに移動したときの処理
       if (currentPage > 1) {
         const orderData = await query.get();
@@ -123,7 +126,7 @@ export const OrderHistory = () => {
   } else {
     return (
       <>
-        <Loading />
+        <Loading noOrderHistory={noOrderHistory} />
       </>
     );
   }
