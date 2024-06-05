@@ -261,7 +261,7 @@ export function RegisterInfo() {
                 className="textField"
                 label="パスワード"
                 variant="outlined"
-                type="text"
+                type="password"
                 {...register("password", {
                   required: "パスワードを入力してください",
                   minLength: {
