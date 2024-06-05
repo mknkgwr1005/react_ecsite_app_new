@@ -7,12 +7,15 @@ import { userContext } from "../components/providers/UserInfoContext";
 import { auth } from "../app/index";
 import { registerInfoContext } from "./Register/RegisterInfo";
 import { registerUserNameContext } from "./Register/RegisterUserName";
+import { cartListContext } from "./providers/CartListProvider";
 
 export const StatusButton: React.VFC = () => {
   //ユーザーが入力した情報
   const userStatus = useContext(userContext);
   // ユーザー情報
   const changeStatus = useContext(statusContext);
+  // ショッピングカート
+  const cart = useContext(cartListContext);
 
   // ナビゲート機能
   const navigate = useNavigate();
@@ -57,6 +60,10 @@ export const StatusButton: React.VFC = () => {
     } else return;
   };
 
+  const clearCart = () => {
+    cart?.setCartList([]);
+  };
+
   // ログアウトメソッド
   const logout = () => {
     signOut(auth)
@@ -66,6 +73,7 @@ export const StatusButton: React.VFC = () => {
         changeStatus?.setstatusCheck(false);
         loginStatus();
         clearUserInfo();
+        clearCart();
       })
       .catch((error) => {
         alert("ログアウトに失敗しました");
