@@ -121,3 +121,22 @@ h2 span:after {
   border: 1px solid #004d40;
   color: white;
 }
+
+.functionButton {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.loginbotan,
+.registerbotan {
+  margin: 0 10px;
+  padding: 10px 20px;
+}
+
+.banner {
+  display: flex;
+  justify-content: center;
+  margin: auto;
+}
