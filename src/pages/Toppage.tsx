@@ -1,13 +1,31 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import PhoneIcon from "@mui/icons-material/Phone";
 import "../css/header.css";
 import "../css/toppage.css";
 import { Card, CardMedia, Grid, Typography } from "@mui/material";
+import axios from "axios";
 
 export const Toppage = () => {
   const navigate = useNavigate();
+
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          "https://hfpzapd4hc.execute-api.ap-northeast-1.amazonaws.com/dev"
+        );
+        setData(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <Grid container spacing={2} sx={{ marginBottom: "10px" }}>

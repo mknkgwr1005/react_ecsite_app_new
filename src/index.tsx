@@ -19,6 +19,7 @@ import { RegisterInfo } from "./components/Register/RegisterInfo";
 import { UserProvider } from "./components/providers/UserInfoContext";
 import { RegisterUserName } from "./components/Register/RegisterUserName";
 import { OrderProvider } from "./components/providers/OrderProvider";
+import { AmplifyConfig } from "../aws/config";
 import { Container } from "@material-ui/core";
 
 const root = ReactDOM.createRoot(
