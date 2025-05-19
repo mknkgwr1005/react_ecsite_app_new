@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "@material-ui/core";
+import Button from "@mui/material/Button";
 import axios from "axios";
 import { app } from "../app/config";
 import { collection, addDoc } from "firebase/firestore";

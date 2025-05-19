@@ -14,8 +14,7 @@ import { Footer } from "./components/Footer";
 import { ItemDetail } from "./pages/ItemDetail";
 
 // デザイン関連のインポート
-import { ThemeProvider } from "@material-ui/core";
-import CssBaseline from "@material-ui/core/CssBaseline";
+import { ThemeProvider, CssBaseline } from "@mui/material";
 import { theme } from "../src/css/theme";
 
 import { ItemRecommendation } from "./pages/ItemRecommendation";

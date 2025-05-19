@@ -17,7 +17,7 @@ import {
   Select,
   RadioGroup,
   Radio,
-} from "@material-ui/core";
+} from "@mui/material";
 import Checkbox from "@mui/material/Checkbox";
 
 export const EditCartItem: FC = () => {

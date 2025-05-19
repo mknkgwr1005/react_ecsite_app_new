@@ -1,6 +1,5 @@
-import { Box, Button, Card, CardMedia, Grid } from "@material-ui/core";
-import { Stack } from "@mui/material";
 import React, { useContext } from "react";
+import { Box, Button, Card, CardMedia, Grid, Stack } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import AllergyModal from "../components/AllergyInfo";
 import { statusContext } from "../components/providers/statusContext";

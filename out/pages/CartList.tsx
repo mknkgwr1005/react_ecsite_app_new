@@ -1,4 +1,4 @@
-import { Button } from "@material-ui/core";
+import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 
 import { CartListTable } from "../components/CartListTable";

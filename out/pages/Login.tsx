@@ -4,7 +4,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { InputLogin } from "../components/inputLogin";
-import Button from "@material-ui/core/Button";
+import Button from "@mui/material/Button";
 import { statusContext } from "../components/providers/statusContext";
 import { app } from "../app/config";
 import "firebase/auth";
@@ -18,7 +18,7 @@ import {
 } from "firebase/auth";
 import "firebase/auth";
 import { TwitterAuthProvider, FacebookAuthProvider } from "firebase/auth";
-import { Box, Grid, Input, Typography } from "@material-ui/core";
+import { Box, Grid, Input, Typography } from "@mui/material";
 import LockIcon from "@mui/icons-material/Lock";
 import EmailIcon from "@mui/icons-material/Email";
 import { collection, addDoc } from "firebase/firestore";

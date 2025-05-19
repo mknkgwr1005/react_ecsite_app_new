@@ -1,4 +1,5 @@
-import { Button, Grid } from "@material-ui/core";
+import Button from "@mui/material/Button";
+import Grid from "@mui/material/Grid";
 import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { statusContext } from "../components/providers/statusContext";

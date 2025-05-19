@@ -4,7 +4,7 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import "../css/faq.css";
-import { Grid } from "@material-ui/core";
+import Grid from "@mui/material/Grid";
 
 export default function FrequentQuestion() {
   return (

@@ -22,7 +22,7 @@ import {
   Radio,
   RadioGroup,
   Select,
-} from "@material-ui/core";
+} from "@mui/material";
 
 export const ItemDetail = () => {
   // routerからitemidを取得する

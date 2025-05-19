@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import Button from "@material-ui/core/Button";
-import { Card, CardMedia, Grid, Typography } from "@material-ui/core";
+import Button from "@mui/material/Button";
+import { Card, CardMedia, Grid, Typography } from "@mui/material";
 import PhoneIcon from "@mui/icons-material/Phone";
 import "../css/header.css";
 import "../css/toppage.css";
