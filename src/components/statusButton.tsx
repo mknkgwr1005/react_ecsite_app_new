@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { statusContext } from "./providers/statusContext";
-import Button from "@material-ui/core/Button";
+import Button from "@mui/material/Button";
 import { signOut } from "firebase/auth";
 import { useLocation, useNavigate } from "react-router-dom";
 import { userContext } from "../components/providers/UserInfoContext";

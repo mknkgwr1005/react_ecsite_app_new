@@ -1,5 +1,9 @@
 import React from "react";
-import { Box, Grid, Input, Typography } from "@material-ui/core";
+// v5では @mui/material に変更
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
+import Input from "@mui/material/Input";
+import Typography from "@mui/material/Typography";
 import "../css/errorPage.css";
 
 export const ErrorPage = () => {

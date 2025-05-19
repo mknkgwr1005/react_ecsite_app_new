@@ -1,8 +1,10 @@
 /* eslint-disable no-lone-blocks */
-import React, { useContext } from "react";
-import { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Button from "@material-ui/core/Button";
+import Button from "@mui/material/Button";
+import { Box, Grid, Input, Typography } from "@mui/material";
+import LockIcon from "@mui/icons-material/Lock";
+import EmailIcon from "@mui/icons-material/Email";
 import { statusContext } from "../components/providers/statusContext";
 import { app } from "../app/config";
 import "firebase/auth";
@@ -12,12 +14,9 @@ import {
   signInWithEmailAndPassword,
   setPersistence,
   browserSessionPersistence,
+  TwitterAuthProvider,
+  FacebookAuthProvider,
 } from "firebase/auth";
-import "firebase/auth";
-import { TwitterAuthProvider, FacebookAuthProvider } from "firebase/auth";
-import { Box, Grid, Input, Typography } from "@material-ui/core";
-import LockIcon from "@mui/icons-material/Lock";
-import EmailIcon from "@mui/icons-material/Email";
 import "../css/Login.css";
 import { auth } from "../app/index";
 

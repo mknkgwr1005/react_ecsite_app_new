@@ -1,7 +1,6 @@
-import { Container } from "@mui/material";
+import { Container, Box } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import "../css/loading.css";
-import { Box } from "@material-ui/core";
 import { NoOrderHistory } from "../components/NoOrderHistory";
 
 type loadingType = {

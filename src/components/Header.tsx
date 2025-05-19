@@ -1,13 +1,13 @@
 import React, { useContext } from "react";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 import { cartListContext } from "./providers/CartListProvider";
 import { StatusButton } from "../components/statusButton";
 import Box, { BoxProps } from "@mui/material/Box";
-import { Badge, IconButton } from "@material-ui/core";
+import { Badge, IconButton } from "@mui/material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { statusContext } from "./providers/statusContext";
 

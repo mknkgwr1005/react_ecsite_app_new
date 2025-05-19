@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Item } from "../types/Item";
 import { Link } from "react-router-dom";
-import { View } from "react-native";
-import { Box, Button, Grid, IconButton } from "@material-ui/core";
+import { Box, Button, Grid, IconButton } from "@mui/material";
 import Modal from "@mui/material/Modal";
 import "../css/itemRecommendation.css";
 import CloseIcon from "@mui/icons-material/Close";
@@ -76,11 +75,10 @@ export const ItemRecommendation = ({ open, handleClose }: reccomendType) => {
             </IconButton>
           </div>
           <div id="order-reminder">この商品も一緒にいかがですか？</div>
-          <View
-            style={{
-              // 横並びにする
+          <Box
+            sx={{
+              display: "flex",
               flexDirection: "row",
-              // はみ出る場合、下に折り返す
               flexWrap: "wrap",
             }}
           >
@@ -114,10 +112,10 @@ export const ItemRecommendation = ({ open, handleClose }: reccomendType) => {
                 </Grid>
               );
             })}
-          </View>
+          </Box>
           <div className="cancel-button">
             <Link to={`/OrderComfirm/`}>
-              <Button type="button" variant="contained" color="default">
+              <Button type="button" variant="contained">
                 注文せずに進む
               </Button>
             </Link>

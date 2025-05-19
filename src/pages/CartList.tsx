@@ -1,4 +1,4 @@
-import { Box, Button, Container } from "@material-ui/core";
+import { Box, Button, Container } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 import { CartListTable } from "../components/CartListTable";

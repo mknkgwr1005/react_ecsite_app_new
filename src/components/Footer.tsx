@@ -1,7 +1,7 @@
 import React from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
-import { Grid } from "@material-ui/core";
+import Grid from "@mui/material/Grid";
 import "../css/footer.css";
 import { Link } from "react-router-dom";
 export const Footer = () => {

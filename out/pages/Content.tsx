@@ -1,16 +1,11 @@
 import React, { createContext, useState } from "react";
-import { Grid } from "@material-ui/core";
-import Stepper from "@material-ui/core/Stepper";
-import Step from "@material-ui/core/Step";
-import StepLabel from "@material-ui/core/StepLabel";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
-
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import Stepper from "@mui/material/Stepper";
+import Step from "@mui/material/Step";
+import StepLabel from "@mui/material/StepLabel";
 import { RegisterConfirm } from "../components/Register/RegisterConfirm";
-import { User } from "../types/User";
-import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { RegisterInfo } from "./RegisterUser";
 
 function getSteps() {

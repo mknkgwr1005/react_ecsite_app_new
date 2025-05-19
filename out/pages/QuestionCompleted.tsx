@@ -1,6 +1,6 @@
 import React from "react";
 import "../css/questionCompleted.css";
-import { Button } from "@material-ui/core";
+import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
 
 export const QuestionCompleted = () => {

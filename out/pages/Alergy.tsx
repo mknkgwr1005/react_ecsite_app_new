@@ -1,4 +1,6 @@
-import { Box, Button, Card, CardMedia, Grid } from "@material-ui/core";
+import Grid from "@mui/material/Grid";
+import Card from "@mui/material/Card";
+import CardMedia from "@mui/material/CardMedia";
 import { Stack } from "@mui/material";
 import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";

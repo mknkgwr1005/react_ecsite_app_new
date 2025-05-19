@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { Item } from "../types/Item";
 import { Link } from "react-router-dom";
 import { View } from "react-native";
-import { Button, ButtonGroup, TextField } from "@material-ui/core";
+import { Button, ButtonGroup, TextField } from "@mui/material";
 import "../css/itemList.css";
 
 export const ItemList = () => {

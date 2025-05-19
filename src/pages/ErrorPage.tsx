@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Grid, Input, Typography } from "@material-ui/core";
+import { Box, Grid, Input, Typography } from "@mui/material";
 import "../css/errorPage.css";
 
 export const ErrorPage = () => {

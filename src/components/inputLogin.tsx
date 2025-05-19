@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 // import { LoginInfoContext } from "./providers/loginInfoContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Button } from "@material-ui/core";
+import Button from "@mui/material/Button";
 
 export const InputLogin = async () => {
   const navigate = useNavigate();
